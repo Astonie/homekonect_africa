@@ -1,7 +1,6 @@
 ﻿<x-app-dashboard 
     title="Admin Dashboard" 
-    subtitle="Welcome back, {{ Auth::user()->name }}! Monitor and manage your platform."
-    role="admin">
+    subtitle="Welcome back, {{ Auth::user()->name }}! Monitor and manage your platform.">
     
     {{-- Navigation Slot --}}
     <x-slot name="navigation">
@@ -57,7 +56,7 @@
             <span x-show="sidebarOpen" x-transition x-cloak class="font-medium">Team Members</span>
         </a>
 
-        <a href="#" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-all duration-200 transform hover:scale-105" :class="sidebarOpen ? 'space-x-3' : 'justify-center'">
+            <a href="{{ route('settings.index') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-all duration-200 transform hover:scale-105" :class="sidebarOpen ? 'space-x-3' : 'justify-center'">
             <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -157,9 +156,9 @@
     </div>
 
     <!-- Quick Actions -->
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-200">
-        <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
-            <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-8 border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
             </svg>
             Quick Actions
@@ -197,15 +196,15 @@
 
     @if($recent_properties->count() > 0)
         <!-- Recent Properties -->
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-200">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-8 border border-gray-200 dark:border-gray-700 transition-colors duration-300">
         <div class="flex items-center justify-between mb-6">
-            <h3 class="text-lg font-bold text-gray-900 flex items-center">
-                <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                 </svg>
                 Recent Properties
             </h3>
-            <a href="{{ route('admin.properties.index') }}" class="text-sm text-purple-600 hover:text-purple-700 font-semibold flex items-center group">
+                <a href="{{ route('admin.properties.index') }}" class="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-semibold flex items-center group">
                 View All
                 <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -216,33 +215,46 @@
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
-                        <tr class="border-b-2 border-gray-200">
-                            <th class="text-left py-3 px-4 text-sm font-bold text-gray-700 uppercase tracking-wider">Property</th>
-                            <th class="text-left py-3 px-4 text-sm font-bold text-gray-700 uppercase tracking-wider">Owner</th>
-                            <th class="text-left py-3 px-4 text-sm font-bold text-gray-700 uppercase tracking-wider">Type</th>
-                            <th class="text-left py-3 px-4 text-sm font-bold text-gray-700 uppercase tracking-wider">Price</th>
-                            <th class="text-left py-3 px-4 text-sm font-bold text-gray-700 uppercase tracking-wider">Status</th>
-                            <th class="text-left py-3 px-4 text-sm font-bold text-gray-700 uppercase tracking-wider">Date Added</th>
+                            <tr class="border-b-2 border-gray-200 dark:border-gray-700">
+                                <th class="text-left py-3 px-4 text-sm font-bold text-gray-700 dark:text-gray-400 uppercase tracking-wider">Property</th>
+                                <th class="text-left py-3 px-4 text-sm font-bold text-gray-700 dark:text-gray-400 uppercase tracking-wider">Owner</th>
+                                <th class="text-left py-3 px-4 text-sm font-bold text-gray-700 dark:text-gray-400 uppercase tracking-wider">Type</th>
+                                <th class="text-left py-3 px-4 text-sm font-bold text-gray-700 dark:text-gray-400 uppercase tracking-wider">Price</th>
+                                <th class="text-left py-3 px-4 text-sm font-bold text-gray-700 dark:text-gray-400 uppercase tracking-wider">Status</th>
+                                <th class="text-left py-3 px-4 text-sm font-bold text-gray-700 dark:text-gray-400 uppercase tracking-wider">Date Added</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100">
+                        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                         @foreach($recent_properties as $property)
-                            <tr class="hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 transition-all duration-200 group">
+                                <tr class="hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 dark:hover:from-gray-700 dark:hover:to-gray-700 transition-all duration-200 group">
                                 <td class="py-4 px-4">
                                     <div class="flex items-center space-x-3">
                                         @if(!empty($property->images) && isset($property->images[0]))
-                                            <div class="relative">
-                                                <img src="{{ Storage::url($property->images[0]) }}" alt="{{ $property->name }}" class="w-14 h-14 rounded-xl object-cover shadow-md group-hover:shadow-lg transition">
+                                            @php
+                                                $imagePath = $property->images[0];
+                                                // Handle different image path formats
+                                                if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+                                                    $imageUrl = $imagePath;
+                                                } elseif (Str::startsWith($imagePath, 'http')) {
+                                                    $imageUrl = $imagePath;
+                                                } elseif (Str::startsWith($imagePath, 'uploads/')) {
+                                                    $imageUrl = asset($imagePath);
+                                                } else {
+                                                    $imageUrl = Storage::url($imagePath);
+                                                }
+                                            @endphp
+                                            <div class="relative flex-shrink-0">
+                                                <img src="{{ $imageUrl }}" alt="{{ $property->name ?? $property->title }}" class="w-14 h-14 rounded-xl object-cover shadow-md group-hover:shadow-lg transition" onerror="this.parentElement.innerHTML='<div class=\'w-14 h-14 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center shadow-md\'><svg class=\'w-7 h-7 text-gray-400\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\'></path></svg></div>'">
                                                 <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl"></div>
                                             </div>
                                         @else
-                                            <div class="w-14 h-14 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center shadow-md">
+                                            <div class="w-14 h-14 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center shadow-md flex-shrink-0">
                                                 <svg class="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                                 </svg>
                                             </div>
                                         @endif
-                                        <span class="font-semibold text-gray-900 group-hover:text-purple-700 transition">{{ $property->name }}</span>
+                                            <span class="font-semibold text-gray-900 dark:text-white group-hover:text-purple-700 dark:group-hover:text-purple-400 transition">{{ $property->name ?? $property->title }}</span>
                                     </div>
                                 </td>
                                 <td class="py-4 px-4">
@@ -250,7 +262,7 @@
                                         <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-blue-500 flex items-center justify-center text-white font-bold text-xs mr-2">
                                             {{ strtoupper(substr($property->owner->name, 0, 1)) }}
                                         </div>
-                                        <span class="text-sm text-gray-700 font-medium">{{ $property->owner->name }}</span>
+                                            <span class="text-sm text-gray-700 dark:text-gray-300 font-medium">{{ $property->owner->name }}</span>
                                     </div>
                                 </td>
                                 <td class="py-4 px-4">
@@ -259,7 +271,7 @@
                                     </span>
                                 </td>
                                 <td class="py-4 px-4">
-                                    <span class="text-base font-bold text-gray-900">${{ number_format($property->rent_amount, 2) }}</span>
+                                        <span class="text-base font-bold text-gray-900 dark:text-white">${{ number_format($property->rent_amount, 2) }}</span>
                                     <span class="text-xs text-gray-500 ml-1">/mo</span>
                                 </td>
                                 <td class="py-4 px-4">
@@ -274,7 +286,7 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="py-4 px-4 text-sm text-gray-600 font-medium">
+                                    <td class="py-4 px-4 text-sm text-gray-600 dark:text-gray-400 font-medium">
                                     {{ $property->created_at->format('M d, Y') }}
                                 </td>
                             </tr>
@@ -298,9 +310,9 @@
 
     <!-- Pending KYC Verifications -->
     @if($pending_kyc->count() > 0)
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-300">
         <div class="flex items-center justify-between mb-6">
-            <h3 class="text-lg font-bold text-gray-900 flex items-center">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center">
                 <svg class="w-5 h-5 mr-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                 </svg>
@@ -365,21 +377,21 @@
         </div>
     </div>
     @else
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h3 class="text-lg font-bold text-gray-900 mb-6 flex items-center">
-            <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-300">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+            <svg class="w-5 h-5 mr-2 text-green-600 dark:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
             </svg>
             KYC Verifications
         </h3>
         <div class="text-center py-12">
-            <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-green-100 to-emerald-200 rounded-full flex items-center justify-center">
-                <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-green-100 to-emerald-200 dark:from-green-900 dark:to-emerald-900 rounded-full flex items-center justify-center">
+                <svg class="w-10 h-10 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
             </div>
-            <p class="text-gray-600 font-medium text-lg">All caught up!</p>
-            <p class="text-gray-500 text-sm mt-2">No pending KYC verifications at the moment.</p>
+            <p class="text-gray-600 dark:text-gray-400 font-medium text-lg">All caught up!</p>
+            <p class="text-gray-500 dark:text-gray-500 text-sm mt-2">No pending KYC verifications at the moment.</p>
         </div>
     </div>
     @endif

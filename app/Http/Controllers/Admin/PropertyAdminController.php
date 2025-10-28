@@ -40,6 +40,7 @@ class PropertyAdminController extends Controller
             'pending' => Property::where('status', 'pending')->count(),
             'verified' => Property::where('is_verified', true)->count(),
             'docs_submitted' => Property::where('documents_submitted', true)->where('is_verified', false)->count(),
+            'rejected' => Property::where('status', 'inactive')->where('rejection_reason', '!=', null)->count(),
         ];
 
         return view('admin.properties.index', compact('properties', 'stats'));
