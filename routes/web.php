@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminDashboardController;
@@ -13,29 +13,25 @@ use App\Http\Controllers\Agent\PropertyController as AgentPropertyController;
 use App\Http\Controllers\KycVerificationController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\HomeController;
 use App\Models\Property;
-use App\Models\TeamMember;
 use Illuminate\Support\Facades\Route;
 
-// Public Routes - Using HomeController from front-pages
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', function () {
+    $properties = Property::with('owner')
+        ->where('status', 'available')
+        ->where('is_verified', true)
+        ->latest('published_at')
+        ->take(6)
+        ->get();
+    
+    $teamMembers = \App\Models\TeamMember::active()->ordered()->get();
+    
+    return view('welcome', compact('properties', 'teamMembers'));
+});
 
-// Static Pages
-Route::get('/about', function () {
-    $teamMembers = TeamMember::active()->ordered()->get();
-    return view('about', compact('teamMembers'));
-})->name('about');
-
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
-
-// Public Property Routes - Using HomeController from front-pages
-Route::get('/properties', [HomeController::class, 'properties'])->name('properties');
-
-// Property Details Route
-Route::get('/properties/{property}', [HomeController::class, 'showProperty'])->name('property.details');
+// Public Property Routes
+Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
+Route::get('/properties/{slug}', [PropertyController::class, 'show'])->name('properties.show');
 
 // Redirect to role-specific dashboard after login
 Route::get('/dashboard', function () {

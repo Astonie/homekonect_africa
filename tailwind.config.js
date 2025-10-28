@@ -10,83 +10,116 @@ export default {
     ],
 
     darkMode: 'class',
-  theme: {
-    extend: {
-      colors: {
-        primary: 'hsl(200, 95%, 40%)',
-        secondary: 'hsl(220, 20%, 96%)',
-        background: {
-          DEFAULT: 'hsl(0, 0%, 100%)', // Pure white
-          soft: 'hsl(220, 20%, 98%)',   // Softer alternative
-          card: 'hsl(0, 0%, 100%)',   
-          muted: 'hsl(220, 15%, 95%)',  // For disabled states
-          dark: 'hsl(215, 30%, 9%)',   // Dark blue-gray
-          'dark-soft': 'hsl(215, 28%, 10%)',
-          'dark-card': 'hsl(215, 28%, 12%)',
-          'dark-muted': 'hsl(215, 25%, 16%)',
+    
+    theme: {
+        extend: {
+            colors: {
+                primary: {
+                    DEFAULT: 'hsl(200, 95%, 40%)',
+                    50: 'hsl(200, 95%, 95%)',
+                    100: 'hsl(200, 95%, 90%)',
+                    200: 'hsl(200, 95%, 80%)',
+                    300: 'hsl(200, 95%, 70%)',
+                    400: 'hsl(200, 95%, 50%)',
+                    500: 'hsl(200, 95%, 40%)',
+                    600: 'hsl(200, 95%, 35%)',
+                    700: 'hsl(200, 95%, 30%)',
+                    800: 'hsl(200, 95%, 25%)',
+                    900: 'hsl(200, 95%, 20%)',
+                },
+                secondary: {
+                    DEFAULT: 'hsl(220, 20%, 96%)',
+                    50: 'hsl(220, 20%, 98%)',
+                    100: 'hsl(220, 20%, 96%)',
+                    200: 'hsl(220, 20%, 92%)',
+                    300: 'hsl(220, 20%, 88%)',
+                    400: 'hsl(220, 20%, 84%)',
+                    500: 'hsl(220, 20%, 80%)',
+                },
+                accent: {
+                    DEFAULT: 'hsl(30, 100%, 50%)',
+                    50: 'hsl(30, 100%, 95%)',
+                    100: 'hsl(30, 100%, 90%)',
+                    200: 'hsl(30, 100%, 80%)',
+                    300: 'hsl(30, 100%, 70%)',
+                    400: 'hsl(30, 100%, 60%)',
+                    500: 'hsl(30, 100%, 50%)',
+                    600: 'hsl(30, 100%, 45%)',
+                    700: 'hsl(30, 100%, 40%)',
+                    800: 'hsl(30, 100%, 35%)',
+                    900: 'hsl(30, 100%, 30%)',
+                },
+                success: {
+                    50: 'hsl(150, 60%, 96%)',
+                    100: 'hsl(150, 60%, 90%)',
+                    200: 'hsl(150, 60%, 80%)',
+                    300: 'hsl(150, 60%, 70%)',
+                    400: 'hsl(150, 60%, 60%)',
+                    500: 'hsl(150, 60%, 50%)',
+                    600: 'hsl(150, 60%, 45%)',
+                    700: 'hsl(150, 60%, 40%)',
+                    800: 'hsl(150, 60%, 35%)',
+                    900: 'hsl(150, 60%, 30%)',
+                },
+                warning: {
+                    50: 'hsl(45, 100%, 96%)',
+                    100: 'hsl(45, 100%, 90%)',
+                    200: 'hsl(45, 100%, 80%)',
+                    300: 'hsl(45, 100%, 70%)',
+                    400: 'hsl(45, 100%, 60%)',
+                    500: 'hsl(45, 100%, 51%)',
+                    600: 'hsl(45, 100%, 47%)',
+                    700: 'hsl(45, 100%, 42%)',
+                    800: 'hsl(45, 100%, 37%)',
+                    900: 'hsl(45, 100%, 32%)',
+                },
+                danger: {
+                    50: 'hsl(0, 90%, 96%)',
+                    100: 'hsl(0, 90%, 90%)',
+                    200: 'hsl(0, 90%, 80%)',
+                    300: 'hsl(0, 90%, 70%)',
+                    400: 'hsl(0, 90%, 60%)',
+                    500: 'hsl(0, 90%, 55%)',
+                    600: 'hsl(0, 90%, 50%)',
+                    700: 'hsl(0, 90%, 45%)',
+                    800: 'hsl(0, 90%, 40%)',
+                    900: 'hsl(0, 90%, 35%)',
+                },
+                info: {
+                    50: 'hsl(200, 95%, 96%)',
+                    100: 'hsl(200, 95%, 90%)',
+                    200: 'hsl(200, 95%, 80%)',
+                    300: 'hsl(200, 95%, 70%)',
+                    400: 'hsl(200, 95%, 60%)',
+                    500: 'hsl(200, 95%, 50%)',
+                    600: 'hsl(200, 95%, 45%)',
+                    700: 'hsl(200, 95%, 40%)',
+                    800: 'hsl(200, 95%, 35%)',
+                    900: 'hsl(200, 95%, 30%)',
+                },
+            },
+            textColor: {
+                primary: 'hsl(215, 30%, 15%)',
+                secondary: 'hsl(215, 25%, 35%)',
+                tertiary: 'hsl(215, 20%, 50%)',
+                muted: 'hsl(215, 20%, 50%)',
+                light: 'hsl(215, 15%, 65%)',
+                inverted: 'hsl(0, 0%, 98%)',
+            },
+            backgroundColor: {
+                soft: 'hsl(220, 20%, 98%)',
+                card: 'hsl(0, 0%, 100%)',
+                muted: 'hsl(220, 15%, 95%)',
+            },
+            borderColor: {
+                light: 'hsl(220, 15%, 88%)',
+                strong: 'hsl(220, 15%, 75%)',
+            },
+            fontFamily: {
+                sans: ['Figtree', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            },
         },
-        text: {
-          base: 'hsl(215, 30%, 15%)',        // Darker for better readability
-          primary: 'hsl(215, 30%, 15%)',     // Primary text
-          secondary: 'hsl(215, 25%, 35%)',   // Secondary text
-          tertiary: 'hsl(215, 20%, 50%)',    // Tertiary text
-          muted: 'hsl(215, 20%, 50%)',       // Muted text
-          light: 'hsl(215, 15%, 65%)',       // Light text
-          inverted: 'hsl(0, 0%, 98%)',    // For dark backgrounds
-          'dark-base': 'hsl(0, 0%, 98%)',     // Dark mode base text
-          'dark-primary': 'hsl(0, 0%, 98%)',  // Dark mode primary
-          'dark-secondary': 'hsl(0, 0%, 90%)', // Dark mode secondary
-          'dark-tertiary': 'hsl(215, 15%, 65%)',  // Dark mode tertiary
-          'dark-muted': 'hsl(215, 15%, 65%)',     // Dark mode muted
-          'dark-light': 'hsl(215, 15%, 50%)',     // Dark mode light
-        },
-        border: {
-          light: 'hsl(220, 15%, 88%)',      // Light border
-          DEFAULT: 'hsl(220, 15%, 88%)',    // Default border
-          strong: 'hsl(220, 15%, 75%)',     // Stronger border
-          dark: 'hsl(215, 25%, 18%)',       // Dark mode default
-          'dark-light': 'hsl(215, 25%, 16%)', // Dark mode light
-          'dark-strong': 'hsl(215, 25%, 25%)', // Dark mode strong
-        },
-        // Status colors for better UI feedback
-        success: {
-          50: 'hsl(150, 60%, 96%)',
-          500: 'hsl(150, 60%, 50%)',
-          600: 'hsl(150, 60%, 45%)',
-          700: 'hsl(150, 60%, 40%)'
-        },
-        warning: {
-          50: 'hsl(45, 100%, 96%)',
-          500: 'hsl(45, 100%, 51%)',
-          600: 'hsl(45, 100%, 47%)',  
-          700: 'hsl(45, 100%, 42%)'
-        },
-        danger: {
-          50: 'hsl(0, 90%, 96%)',
-          500: 'hsl(0, 90%, 55%)',
-          600: 'hsl(0, 90%, 50%)',
-          700: 'hsl(0, 90%, 45%)'
-        },
-        info: {
-          50: 'hsl(200, 95%, 96%)',
-          500: 'hsl(200, 95%, 50%)',
-          600: 'hsl(200, 95%, 45%)',
-          700: 'hsl(200, 95%, 40%)'
-        },
-        accent: {
-          DEFAULT: 'hsl(30, 100%, 50%)',
-          50: 'hsl(30, 100%, 95%)',
-          500: 'hsl(30, 100%, 50%)',
-          600: 'hsl(30, 100%, 45%)',
-          700: 'hsl(30, 100%, 40%)',
-          dark: 'hsl(30, 100%, 55%)',
-        }
-      },
-      fontFamily: {
-        sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-      },
     },
-  },
 
     plugins: [forms],
 };
