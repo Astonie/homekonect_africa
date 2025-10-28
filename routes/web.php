@@ -37,7 +37,6 @@ Route::get('/properties', [HomeController::class, 'properties'])->name('properti
 // Property Details Route
 Route::get('/properties/{property}', [HomeController::class, 'showProperty'])->name('property.details');
 
-// Redirect to role-specific dashboard after login
 Route::get('/dashboard', function () {
     $user = auth()->user();
     
