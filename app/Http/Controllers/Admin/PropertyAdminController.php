@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Property;
+use App\Notifications\PropertyApprovedNotification;
+use App\Notifications\PropertyRejectedNotification;
 use Illuminate\Http\Request;
 
 class PropertyAdminController extends Controller
@@ -66,6 +68,9 @@ class PropertyAdminController extends Controller
             'rejection_reason' => null,
         ]);
 
+        // Send email notification to property owner
+        $property->user->notify(new PropertyApprovedNotification($property));
+
         return redirect()->route('admin.properties.show', $property)
             ->with('success', 'Property has been verified successfully and is now available for listing.');
     }
@@ -82,6 +87,9 @@ class PropertyAdminController extends Controller
             'verified_by' => auth()->id(),
             'rejection_reason' => $request->reason,
         ]);
+
+        // Send email notification to property owner
+        $property->user->notify(new PropertyRejectedNotification($property, $request->reason));
 
         return redirect()->route('admin.properties.show', $property)
             ->with('success', 'Property has been rejected.');

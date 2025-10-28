@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\KycVerification;
 use App\Models\User;
+use App\Notifications\KYCVerifiedNotification;
 use Illuminate\Http\Request;
 
 class KycVerificationAdminController extends Controller
@@ -67,6 +68,9 @@ class KycVerificationAdminController extends Controller
             'verified_at' => now(),
         ]);
 
+        // Send email notification
+        $kycVerification->user->notify(new KYCVerifiedNotification('verified'));
+
         return redirect()->route('admin.kyc.index')
             ->with('success', "KYC verification for {$kycVerification->user->name} has been approved.");
     }
@@ -96,6 +100,9 @@ class KycVerificationAdminController extends Controller
             'verification_status' => 'rejected',
             'verified_at' => null,
         ]);
+
+        // Send email notification
+        $kycVerification->user->notify(new KYCVerifiedNotification('rejected'));
 
         return redirect()->route('admin.kyc.index')
             ->with('success', "KYC verification for {$kycVerification->user->name} has been rejected.");

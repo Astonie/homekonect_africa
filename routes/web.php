@@ -13,6 +13,7 @@ use App\Http\Controllers\Agent\PropertyController as AgentPropertyController;
 use App\Http\Controllers\KycVerificationController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\ContactController;
 use App\Models\Property;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,11 @@ Route::get('/', function () {
 // Public Property Routes
 Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
 Route::get('/properties/{slug}', [PropertyController::class, 'show'])->name('properties.show');
+
+// Contact Routes
+Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+Route::post('/properties/{property}/inquiry', [ContactController::class, 'sendInquiry'])->name('properties.inquiry');
 
 Route::get('/dashboard', function () {
     $user = auth()->user();
