@@ -33,7 +33,6 @@ Route::get('/', function () {
 Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
 Route::get('/properties/{slug}', [PropertyController::class, 'show'])->name('properties.show');
 
-// Redirect to role-specific dashboard after login
 Route::get('/dashboard', function () {
     $user = auth()->user();
     
