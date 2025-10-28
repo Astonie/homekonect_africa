@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\KycVerificationAdminController;
 use App\Http\Controllers\Admin\PropertyAdminController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Tenant\TenantDashboardController;
 use App\Http\Controllers\Landlord\LandlordDashboardController;
 use App\Http\Controllers\Landlord\PropertyController as LandlordPropertyController;
@@ -21,7 +22,9 @@ Route::get('/', function () {
         ->take(6)
         ->get();
     
-    return view('welcome', compact('properties'));
+    $teamMembers = \App\Models\TeamMember::active()->ordered()->get();
+    
+    return view('welcome', compact('properties', 'teamMembers'));
 });
 
 // Redirect to role-specific dashboard after login
@@ -41,6 +44,9 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     
+    // User Management
+    Route::resource('users', UserController::class);
+    
     // Property Management
     Route::prefix('properties')->name('properties.')->group(function () {
         Route::get('/', [PropertyAdminController::class, 'index'])->name('index');
@@ -59,6 +65,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
         Route::post('/{kycVerification}/under-review', [KycVerificationAdminController::class, 'markUnderReview'])->name('under-review');
         Route::post('/{kycVerification}/notes', [KycVerificationAdminController::class, 'updateNotes'])->name('notes');
     });
+    
+    // Team Management
+    Route::resource('team', \App\Http\Controllers\Admin\TeamMemberController::class)->except(['show']);
 });
 
 // Tenant Routes
@@ -70,6 +79,10 @@ Route::middleware(['auth', 'verified', 'role:tenant'])->prefix('tenant')->name('
 Route::middleware(['auth', 'verified', 'role:landlord'])->prefix('landlord')->name('landlord.')->group(function () {
     Route::get('/dashboard', [LandlordDashboardController::class, 'index'])->name('dashboard');
     Route::resource('properties', LandlordPropertyController::class);
+    
+    // Document Management
+    Route::resource('documents', \App\Http\Controllers\Landlord\DocumentController::class);
+    Route::get('documents/{document}/download', [\App\Http\Controllers\Landlord\DocumentController::class, 'download'])->name('documents.download');
 });
 
 // Agent Routes
