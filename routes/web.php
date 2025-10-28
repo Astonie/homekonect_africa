@@ -11,10 +11,14 @@ use App\Http\Controllers\Landlord\PropertyController as LandlordPropertyControll
 use App\Http\Controllers\Agent\AgentDashboardController;
 use App\Http\Controllers\Agent\PropertyController as AgentPropertyController;
 use App\Http\Controllers\KycVerificationController;
+use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\HomeController;
+use App\Models\Property;
 use App\Models\TeamMember;
 use Illuminate\Support\Facades\Route;
 
+// Public Routes - Using HomeController from front-pages
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Static Pages
@@ -27,11 +31,11 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
+// Public Property Routes - Using HomeController from front-pages
 Route::get('/properties', [HomeController::class, 'properties'])->name('properties');
 
 // Property Details Route
 Route::get('/properties/{property}', [HomeController::class, 'showProperty'])->name('property.details');
-
 
 Route::get('/dashboard', function () {
     $user = auth()->user();
@@ -96,10 +100,20 @@ Route::middleware(['auth', 'verified', 'role:agent'])->prefix('agent')->name('ag
     Route::resource('properties', AgentPropertyController::class);
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // Settings Routes
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::get('/', [SettingsController::class, 'index'])->name('index');
+        Route::patch('/profile', [SettingsController::class, 'updateProfile'])->name('profile.update');
+        Route::patch('/password', [SettingsController::class, 'updatePassword'])->name('password.update');
+        Route::patch('/notifications', [SettingsController::class, 'updateNotifications'])->name('notifications.update');
+        Route::patch('/privacy', [SettingsController::class, 'updatePrivacy'])->name('privacy.update');
+        Route::delete('/account', [SettingsController::class, 'deleteAccount'])->name('account.delete');
+    });
     
     // KYC Verification Routes (for agents and landlords)
     Route::prefix('kyc')->name('kyc.')->group(function () {

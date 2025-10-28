@@ -81,7 +81,10 @@ export default {
           700: 'hsl(30, 100%, 40%)',
           dark: 'hsl(30, 100%, 55%)',
         }
-      }
+      },
+      fontFamily: {
+        sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+      },
     },
   },
 
