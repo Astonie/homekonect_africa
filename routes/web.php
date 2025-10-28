@@ -4,31 +4,30 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\KycVerificationAdminController;
 use App\Http\Controllers\Admin\PropertyAdminController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Tenant\TenantDashboardController;
 use App\Http\Controllers\Landlord\LandlordDashboardController;
 use App\Http\Controllers\Landlord\PropertyController as LandlordPropertyController;
 use App\Http\Controllers\Agent\AgentDashboardController;
 use App\Http\Controllers\Agent\PropertyController as AgentPropertyController;
 use App\Http\Controllers\KycVerificationController;
-use App\Http\Controllers\HomeController;
 use App\Models\Property;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', function () {
+    $properties = Property::with('owner')
+        ->where('status', 'available')
+        ->where('is_verified', true)
+        ->latest('published_at')
+        ->take(6)
+        ->get();
+    
+    $teamMembers = \App\Models\TeamMember::active()->ordered()->get();
+    
+    return view('welcome', compact('properties', 'teamMembers'));
+});
 
-// Static Pages
-Route::get('/about', function () {
-    return view('about');
-})->name('about');
-
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
-
-Route::get('/properties', [HomeController::class, 'properties'])->name('properties');
-
-// Property Details Route
-Route::get('/properties/{property}', [HomeController::class, 'showProperty'])->name('property.details');// Redirect to role-specific dashboard after login
+// Redirect to role-specific dashboard after login
 Route::get('/dashboard', function () {
     $user = auth()->user();
     
@@ -44,6 +43,9 @@ Route::get('/dashboard', function () {
 // Admin Routes
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    
+    // User Management
+    Route::resource('users', UserController::class);
     
     // Property Management
     Route::prefix('properties')->name('properties.')->group(function () {
@@ -63,6 +65,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
         Route::post('/{kycVerification}/under-review', [KycVerificationAdminController::class, 'markUnderReview'])->name('under-review');
         Route::post('/{kycVerification}/notes', [KycVerificationAdminController::class, 'updateNotes'])->name('notes');
     });
+    
+    // Team Management
+    Route::resource('team', \App\Http\Controllers\Admin\TeamMemberController::class)->except(['show']);
 });
 
 // Tenant Routes
@@ -74,6 +79,10 @@ Route::middleware(['auth', 'verified', 'role:tenant'])->prefix('tenant')->name('
 Route::middleware(['auth', 'verified', 'role:landlord'])->prefix('landlord')->name('landlord.')->group(function () {
     Route::get('/dashboard', [LandlordDashboardController::class, 'index'])->name('dashboard');
     Route::resource('properties', LandlordPropertyController::class);
+    
+    // Document Management
+    Route::resource('documents', \App\Http\Controllers\Landlord\DocumentController::class);
+    Route::get('documents/{document}/download', [\App\Http\Controllers\Landlord\DocumentController::class, 'download'])->name('documents.download');
 });
 
 // Agent Routes

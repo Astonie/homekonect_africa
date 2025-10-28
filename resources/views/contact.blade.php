@@ -18,8 +18,6 @@
                 Have questions about our services? Need help finding your dream home?
                 We're here to help every step of the way.
             </p>
-
-            
         </div>
     </div>
 </section>
@@ -112,7 +110,7 @@
                             </div>
                             <div>
                                 <h3 class="text-lg font-semibold text-text-primary mb-1">Call Us</h3>
-                                <p class="text-text-secondary">+1 (555) 123-4567</p>
+                                <p class="text-text-secondary">+234 803 123 4567</p>
                                 <p class="text-text-secondary">Mon-Fri: 9AM - 6PM EST</p>
                             </div>
                         </div>
@@ -126,8 +124,8 @@
                             </div>
                             <div>
                                 <h3 class="text-lg font-semibold text-text-primary mb-1">Visit Us</h3>
-                                <p class="text-text-secondary">123 Real Estate Avenue</p>
-                                <p class="text-text-secondary">New York, NY 10001</p>
+                                <p class="text-text-secondary">Plot 12, Admiralty Way, Lekki Phase 1</p>
+                                <p class="text-text-secondary">Lagos, Nigeria</p>
                             </div>
                         </div>
                     </div>

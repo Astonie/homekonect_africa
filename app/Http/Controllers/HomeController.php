@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Property;
+use App\Models\{Property, TeamMember};
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -10,27 +10,37 @@ class HomeController extends Controller
     /**
      * Display the homepage with featured properties
      */
-    public function index()
+    public function index(Request $request)
     {
-        $properties = Property::with('owner')
+        $query = Property::with('owner')
             ->where('status', 'available')
-            ->where('is_verified', true)
-            ->latest('published_at')
+            ->where('is_verified', true);
+
+        // Apply filters if provided
+        $this->applyFilters($query, $request);
+
+        $properties = $query->latest('published_at')
             ->take(6)
             ->get();
 
-        return view('welcome', compact('properties'));
+        $teamMembers = TeamMember::active()->ordered()->get();
+
+        return view('welcome', compact('properties', 'teamMembers'));
     }
 
     /**
      * Display all available properties with pagination
      */
-    public function properties()
+    public function properties(Request $request)
     {
-        $properties = Property::with('owner')
+        $query = Property::with('owner')
             ->where('status', 'available')
-            ->where('is_verified', true)
-            ->latest('published_at')
+            ->where('is_verified', true);
+
+        // Apply filters if provided
+        $this->applyFilters($query, $request);
+
+        $properties = $query->latest('published_at')
             ->paginate(12);
 
         return view('properties', compact('properties'));
@@ -95,5 +105,61 @@ class HomeController extends Controller
         }
 
         return $similarProperties;
+    }
+
+    /**
+     * Apply filters to the property query
+     */
+    private function applyFilters($query, Request $request)
+    {
+        // Location filter (search in city, state, or address)
+        if ($request->filled('location')) {
+            $location = $request->location;
+            $query->where(function ($q) use ($location) {
+                $q->where('city', 'like', '%' . $location . '%')
+                  ->orWhere('state', 'like', '%' . $location . '%')
+                  ->orWhere('address', 'like', '%' . $location . '%');
+            });
+        }
+
+        // Property type filter
+        if ($request->filled('property_type') && $request->property_type !== 'All Types') {
+            $query->where('type', $request->property_type);
+        }
+
+        // Price range filter
+        if ($request->filled('price_range') && $request->price_range !== 'Any Price') {
+            $this->applyPriceFilter($query, $request->price_range);
+        }
+
+        // Bedrooms filter
+        if ($request->filled('bedrooms') && $request->bedrooms !== 'Any') {
+            $bedroomCount = (int) $request->bedrooms;
+            $query->where('bedrooms', '>=', $bedroomCount);
+        }
+    }
+
+    /**
+     * Apply price range filter
+     */
+    private function applyPriceFilter($query, $priceRange)
+    {
+        switch ($priceRange) {
+            case '$0 - $200k':
+                $query->where('price', '<=', 200000);
+                break;
+            case '$200k - $500k':
+                $query->whereBetween('price', [200000, 500000]);
+                break;
+            case '$500k - $1M':
+                $query->whereBetween('price', [500000, 1000000]);
+                break;
+            case '$1M - $2M':
+                $query->whereBetween('price', [1000000, 2000000]);
+                break;
+            case '$2M+':
+                $query->where('price', '>=', 2000000);
+                break;
+        }
     }
 }
