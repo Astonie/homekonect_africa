@@ -13,6 +13,7 @@ class Property extends Model
 
     protected $fillable = [
         'user_id',
+           'currency_id',
         'title',
         'description',
         'type',
@@ -114,6 +115,14 @@ class Property extends Model
         return $this->belongsTo(User::class, 'verified_by');
     }
 
+       /**
+        * Get the currency for the property
+        */
+       public function currency(): BelongsTo
+       {
+           return $this->belongsTo(Currency::class);
+       }
+
     /**
      * Scope for available properties
      */
@@ -159,7 +168,8 @@ class Property extends Model
      */
     public function getFormattedPriceAttribute()
     {
-        return '$' . number_format((float) $this->price, 2);
+           $symbol = $this->currency ? $this->currency->symbol : '$';
+           return $symbol . ' ' . number_format((float) $this->price, 2);
     }
 
     /**
@@ -167,7 +177,41 @@ class Property extends Model
      */
     public function getFirstImageAttribute()
     {
-        return $this->images[0] ?? 'https://via.placeholder.com/800x600?text=No+Image';
+        if (!$this->images || !is_array($this->images) || count($this->images) === 0) {
+            return 'https://via.placeholder.com/800x600?text=No+Image';
+        }
+
+        // Check if new format (with 'path' and 'is_featured' keys)
+        $firstItem = $this->images[0];
+        if (is_array($firstItem) && isset($firstItem['path'])) {
+            // New format - find featured image
+            $featured = collect($this->images)->firstWhere('is_featured', true);
+            return $featured ? $featured['path'] : $this->images[0]['path'];
+        }
+
+        // Old format - simple URL string
+        return is_string($firstItem) ? $firstItem : 'https://via.placeholder.com/800x600?text=No+Image';
+    }
+
+    /**
+     * Get featured image
+     */
+    public function getFeaturedImageAttribute()
+    {
+        if (!$this->images || !is_array($this->images) || count($this->images) === 0) {
+            return 'https://via.placeholder.com/800x600?text=No+Image';
+        }
+
+        // Check if new format (with 'path' and 'is_featured' keys)
+        $firstItem = $this->images[0];
+        if (is_array($firstItem) && isset($firstItem['path'])) {
+            // New format - find featured image
+            $featured = collect($this->images)->firstWhere('is_featured', true);
+            return $featured ? $featured['path'] : $this->images[0]['path'];
+        }
+
+        // Old format - return first image
+        return is_string($firstItem) ? $firstItem : 'https://via.placeholder.com/800x600?text=No+Image';
     }
 
     /**

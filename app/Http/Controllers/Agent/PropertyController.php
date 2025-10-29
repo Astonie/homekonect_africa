@@ -70,14 +70,17 @@ class PropertyController extends Controller
             'amenities' => 'nullable|array',
             'available_from' => 'nullable|date',
             'lease_duration' => 'nullable|integer',
+            'currency_id' => 'required|exists:currencies,id',
             // Property documents
             'ownership_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'tax_receipt' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'insurance_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'building_permit' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'additional_documents.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            // Images
-            'images.*' => 'nullable|image|max:5120',
+            // Multi-image upload handled below
+            'property_images' => 'required|array|min:1',
+            'property_images.*.file' => 'required|string',
+            'property_images.*.is_featured' => 'required|in:0,1',
         ]);
 
         $validated['user_id'] = auth()->id();
@@ -107,15 +110,25 @@ class PropertyController extends Controller
             $validated['additional_documents'] = $additionalDocs;
         }
 
-        // Handle images
-        if ($request->hasFile('images')) {
-            $images = [];
-            foreach ($request->file('images') as $image) {
-                $path = $image->store('properties/images', 'public');
-                $images[] = Storage::url($path);
+        // Handle images from base64 (from Alpine.js)
+        $images = [];
+        foreach ($request->input('property_images', []) as $img) {
+            if (isset($img['file']) && strpos($img['file'], 'data:image') === 0) {
+                $imageData = $img['file'];
+                $image = str_replace(' ', '+', $imageData);
+                $image_parts = explode(';base64,', $image);
+                $image_type_aux = explode('image/', $image_parts[0]);
+                $image_type = $image_type_aux[1] ?? 'png';
+                $image_base64 = base64_decode($image_parts[1]);
+                $fileName = 'properties/images/' . uniqid() . '.' . $image_type;
+                Storage::disk('public')->put($fileName, $image_base64);
+                $images[] = [
+                    'path' => Storage::url($fileName),
+                    'is_featured' => $img['is_featured'] == '1',
+                ];
             }
-            $validated['images'] = $images;
         }
+        $validated['images'] = $images;
 
         // Mark documents as submitted if any document was uploaded
         if ($request->hasFile('ownership_document') || $request->hasFile('tax_receipt')) {
@@ -123,7 +136,7 @@ class PropertyController extends Controller
             $validated['documents_submitted_at'] = now();
         }
 
-        $property = Property::create($validated);
+    $property = Property::create($validated);
 
         return redirect()->route('agent.properties.index')
             ->with('success', 'Property created successfully! It will be available after admin verification.');

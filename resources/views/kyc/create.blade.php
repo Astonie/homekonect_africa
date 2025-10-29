@@ -29,15 +29,25 @@
                                 @foreach($errors->all() as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
-                            </ul>
+                                       <div x-data="imagePreview()">
                         </div>
-                    @endif
+                                           <input type="file" name="id_front_image" accept="image/*" {{ $existingKyc ? '' : 'required' }}
+                                               @change="showPreview($event)"
+                                               class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
 
+                                           <div x-show="imageUrl" class="mt-3">
+                                               <img :src="imageUrl" class="max-w-xs rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm">
+                                           </div>
                     @if($existingKyc && $existingKyc->status === 'rejected')
-                        <div class="mb-6 rounded-lg border border-yellow-200 dark:border-yellow-900/40 bg-yellow-50 dark:bg-yellow-900/40 p-4 text-yellow-800 dark:text-yellow-300">
+                                       <div x-data="imagePreview()">
                             <div class="font-semibold mb-2">Your previous submission was rejected</div>
-                            <p class="mb-2"><strong>Reason:</strong> {{ $existingKyc->rejection_reason }}</p>
+                                           <input type="file" name="id_back_image" accept="image/*"
+                                               @change="showPreview($event)"
+                                               class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
                             <p>Please review the feedback and resubmit your documents.</p>
+                                           <div x-show="imageUrl" class="mt-3">
+                                               <img :src="imageUrl" class="max-w-xs rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm">
+                                           </div>
                         </div>
                     @endif
 
@@ -45,11 +55,16 @@
                         <h3 class="text-lg font-semibold mb-2">Welcome to KYC Verification</h3>
                         <p class="text-gray-600 dark:text-gray-400">
                             To list properties on HomeKonnect, we need to verify your identity. Please provide the following information and documents.
-                            All information is encrypted and securely stored.
+                                   <div x-data="imagePreview()">
                         </p>
-                    </div>
+                                       <input type="file" name="selfie_image" accept="image/*" {{ $existingKyc ? '' : 'required' }}
+                                           @change="showPreview($event)"
+                                           class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
 
-                    <form method="POST" action="{{ route('kyc.submit') }}" enctype="multipart/form-data" class="space-y-8">
+                                       <div x-show="imageUrl" class="mt-3">
+                                           <img :src="imageUrl" class="max-w-xs rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm">
+                                       </div>
+                    <form method="POST" action="{{ route('kyc.submit') }}" enctype="multipart/form-data" class="space-y-8" x-data="{ submitting: false }" @submit="submitting = true">
                         @csrf
 
                         <!-- Personal Information -->
@@ -65,10 +80,15 @@
                                         <label class="block text-sm font-medium mb-2">License Number</label>
                                         <input type="text" name="license_number" value="{{ old('license_number', $existingKyc->license_number ?? '') }}" class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
                                     </div>
-                                @endif
+                                       <div x-data="imagePreview()">
                                 <div>
-                                    <label class="block text-sm font-medium mb-2">Tax ID / National ID Number <span class="text-red-500">*</span></label>
+                                           <input type="file" name="proof_of_address_image" accept="image/*,application/pdf" {{ $existingKyc ? '' : 'required' }}
+                                               @change="showPreview($event)"
+                                               class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
                                     <input type="text" name="tax_id" value="{{ old('tax_id', $existingKyc->tax_id ?? '') }}" required class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
+                                           <div x-show="imageUrl" class="mt-3">
+                                               <img :src="imageUrl" class="max-w-xs rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm">
+                                           </div>
                                 </div>
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium mb-2">Business Address <span class="text-red-500">*</span></label>
@@ -76,6 +96,26 @@
                                 </div>
                             </div>
                         </div>
+
+           <script>
+               function imagePreview() {
+                   return {
+                       imageUrl: null,
+                       showPreview(event) {
+                           const file = event.target.files[0];
+                           if (file && file.type.startsWith('image/')) {
+                               const reader = new FileReader();
+                               reader.onload = (e) => {
+                                   this.imageUrl = e.target.result;
+                               };
+                               reader.readAsDataURL(file);
+                           } else {
+                               this.imageUrl = null;
+                           }
+                       }
+                   }
+               }
+           </script>
 
                         <!-- ID Document -->
                         <div class="border-b border-gray-200 dark:border-gray-700 pb-8">
@@ -174,9 +214,27 @@
                             <a href="{{ route(auth()->user()->role . '.dashboard') }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
                                 ← Back to Dashboard
                             </a>
-                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white px-8 py-3 rounded-lg font-semibold transition-colors shadow-lg">
-                                Submit KYC Verification
+                            <button type="submit" :disabled="submitting" class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white px-8 py-3 rounded-lg font-semibold transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
+                                <svg x-show="submitting" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span x-text="submitting ? 'Submitting...' : 'Submit KYC Verification'"></span>
                             </button>
+                        </div>
+
+                        <!-- Loading Overlay -->
+                        <div x-show="submitting" x-cloak class="fixed inset-0 bg-gray-900 dark:bg-gray-950 bg-opacity-75 flex items-center justify-center z-50">
+                            <div class="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-sm w-full mx-4 text-center border border-gray-200 dark:border-gray-700">
+                                <div class="mb-4">
+                                    <svg class="animate-spin h-12 w-12 text-blue-600 dark:text-blue-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Submitting KYC</h3>
+                                <p class="text-gray-600 dark:text-gray-400">Please wait while we upload your documents...</p>
+                            </div>
                         </div>
                     </form>
 

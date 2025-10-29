@@ -104,7 +104,7 @@
     {{-- Main Content --}}
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <form action="{{ route('agent.properties.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('agent.properties.store') }}" method="POST" enctype="multipart/form-data" x-data="{ submitting: false }" @submit="submitting = true">
                 @csrf
 
                 <!-- Basic Information -->
@@ -291,6 +291,21 @@
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Pricing</h3>
                         
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                               <div class="md:col-span-3">
+                                   <label class="block text-sm font-medium text-gray-700 mb-2">Currency <span class="text-red-500">*</span></label>
+                                   <select name="currency_id" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                       <option value="">Select Currency</option>
+                                       @foreach(\App\Models\Currency::active()->orderBy('country')->get() as $currency)
+                                           <option value="{{ $currency->id }}" {{ old('currency_id') == $currency->id ? 'selected' : '' }}>
+                                               {{ $currency->symbol }} - {{ $currency->name }} ({{ $currency->country }})
+                                           </option>
+                                       @endforeach
+                                   </select>
+                                   @error('currency_id')
+                                       <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                   @enderror
+                               </div>
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Price (per month/total) *</label>
                                 <input type="number" name="price" value="{{ old('price') }}" required min="0" step="0.01"
@@ -404,17 +419,54 @@
 
                 <!-- Property Images -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                    <div class="p-6">
+                       <div class="p-6" x-data="multiImageUpload()">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Property Images</h3>
                         
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Upload Images</label>
-                            <input type="file" name="images[]" accept="image/*" multiple
+                               <input type="file" accept="image/*" multiple
+                                   @change="handleFiles($event)"
                                 class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                             <p class="text-xs text-gray-500 mt-1">You can select multiple images. JPG, PNG (Max 5MB each)</p>
                             @error('images.*')
                                 <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                             @enderror
+
+                               <!-- Image Preview Grid -->
+                               <div x-show="images.length > 0" class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+                                   <template x-for="(image, index) in images" :key="index">
+                                       <div class="relative group">
+                                           <img :src="image.preview" class="w-full h-40 object-cover rounded-lg border-2" 
+                                               :class="image.isFeatured ? 'border-orange-500' : 'border-gray-300'">
+                                       
+                                           <!-- Featured Badge -->
+                                           <div x-show="image.isFeatured" class="absolute top-2 left-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                                               Featured
+                                           </div>
+                                       
+                                           <!-- Action Buttons -->
+                                           <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all rounded-lg flex items-center justify-center space-x-2 opacity-0 group-hover:opacity-100">
+                                               <button type="button" @click="setFeatured(index)" 
+                                                   class="bg-orange-600 hover:bg-orange-700 text-white px-3 py-1 rounded text-xs font-semibold">
+                                                   <span x-text="image.isFeatured ? 'Featured' : 'Set as Featured'"></span>
+                                               </button>
+                                               <button type="button" @click="removeImage(index)" 
+                                                   class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs font-semibold">
+                                                   Remove
+                                               </button>
+                                           </div>
+
+                                           <!-- Hidden input for this image -->
+                                           <input type="hidden" :name="'property_images[' + index + '][file]'" :value="image.base64">
+                                           <input type="hidden" :name="'property_images[' + index + '][is_featured]'" :value="image.isFeatured ? '1' : '0'">
+                                       </div>
+                                   </template>
+                               </div>
+
+                               <p x-show="images.length > 0" class="text-sm text-gray-600 mt-4">
+                                   <span class="font-semibold" x-text="images.length"></span> image(s) selected. 
+                                   Click "Set as Featured" to choose the main property image.
+                               </p>
                         </div>
                     </div>
                 </div>
@@ -452,11 +504,74 @@
                     <a href="{{ route('agent.properties.index') }}" class="bg-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-400 transition">
                         Cancel
                     </a>
-                    <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-medium">
-                        Create Property
+                    <button type="submit" :disabled="submitting" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
+                        <svg x-show="submitting" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span x-text="submitting ? 'Creating Property...' : 'Create Property'"></span>
                     </button>
+                </div>
+
+                <!-- Loading Overlay -->
+                <div x-show="submitting" x-cloak class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+                    <div class="bg-white rounded-lg p-8 max-w-sm w-full mx-4 text-center">
+                        <div class="mb-4">
+                            <svg class="animate-spin h-12 w-12 text-orange-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Creating Property</h3>
+                        <p class="text-gray-600">Please wait while we process your submission...</p>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
+
+       <script>
+           function multiImageUpload() {
+               return {
+                   images: [],
+               
+                   handleFiles(event) {
+                       const files = Array.from(event.target.files);
+                   
+                       files.forEach((file, idx) => {
+                           if (file.type.startsWith('image/')) {
+                               const reader = new FileReader();
+                           
+                               reader.onload = (e) => {
+                                   this.images.push({
+                                       preview: e.target.result,
+                                       base64: e.target.result,
+                                       isFeatured: this.images.length === 0 && idx === 0 // First image is featured by default
+                                   });
+                               };
+                           
+                               reader.readAsDataURL(file);
+                           }
+                       });
+                   },
+               
+                   setFeatured(index) {
+                       // Remove featured from all images
+                       this.images.forEach(img => img.isFeatured = false);
+                       // Set this image as featured
+                       this.images[index].isFeatured = true;
+                   },
+               
+                   removeImage(index) {
+                       const wasFeatured = this.images[index].isFeatured;
+                       this.images.splice(index, 1);
+                   
+                       // If removed image was featured and there are still images, make first one featured
+                       if (wasFeatured && this.images.length > 0) {
+                           this.images[0].isFeatured = true;
+                       }
+                   }
+               }
+           }
+       </script>
 </x-app-dashboard>
