@@ -292,6 +292,11 @@
                     <!-- Contact Card -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sticky top-24 transition-colors duration-300">
                         <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Contact Property Owner</h3>
+                        @if (session('success'))
+                            <div class="mb-4 rounded-lg border border-green-200 bg-green-50 p-3 text-green-800 dark:border-green-900/40 dark:bg-green-900/40 dark:text-green-300">
+                                {{ session('success') }}
+                            </div>
+                        @endif
                         
                         <div class="flex items-center space-x-4 mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
                             <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg">
@@ -304,18 +309,31 @@
                         </div>
 
                         @auth
-                            <button class="w-full bg-blue-600 dark:bg-blue-700 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition font-semibold mb-3">
-                                <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                </svg>
-                                Send Message
-                            </button>
-                            <button class="w-full bg-white dark:bg-gray-700 border-2 border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 px-6 py-3 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-600 transition font-semibold">
-                                <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                                </svg>
-                                Call Now
-                            </button>
+                            <form method="POST" action="{{ route('properties.inquiry', $property) }}" class="space-y-4">
+                                @csrf
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Your Name</label>
+                                    <input name="name" value="{{ old('name', auth()->user()->name) }}" required class="mt-1 w-full rounded-lg border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-100" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
+                                    <input type="email" name="email" value="{{ old('email', auth()->user()->email) }}" required class="mt-1 w-full rounded-lg border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-100" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone (optional)</label>
+                                    <input name="phone" value="{{ old('phone') }}" class="mt-1 w-full rounded-lg border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-100" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Message</label>
+                                    <textarea name="message" rows="4" required class="mt-1 w-full rounded-lg border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-100" placeholder="I'm interested in {{ $property->title }}. Please contact me.">{{ old('message') }}</textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-blue-600 dark:bg-blue-700 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition font-semibold">
+                                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                    Send Inquiry
+                                </button>
+                            </form>
                         @else
                             <a href="{{ route('login') }}" class="block w-full bg-blue-600 dark:bg-blue-700 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition font-semibold text-center mb-3">
                                 Login to Contact

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Notifications\WelcomeNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -44,14 +43,11 @@ class RegisteredUserController extends Controller
             'role' => $request->role,
         ]);
 
-        event(new Registered($user));
+    event(new Registered($user));
 
-        // Send welcome email
-        $user->notify(new WelcomeNotification());
+    Auth::login($user);
 
-        Auth::login($user);
-
-        // Redirect to role-specific dashboard
-        return redirect()->route($user->role . '.dashboard');
+    // Redirect to email verification notice until user verifies
+    return redirect()->route('verification.notice');
     }
 }

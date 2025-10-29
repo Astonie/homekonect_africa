@@ -13,10 +13,10 @@ MAIL_MAILER=smtp
 MAIL_SCHEME=tls
 MAIL_HOST=smtp.gmail.com
 MAIL_PORT=587
-MAIL_USERNAME=homekonnect247@gmail.com
-MAIL_PASSWORD=adhctalcivzrgbqr
+MAIL_USERNAME=your_gmail_address@gmail.com
+MAIL_PASSWORD=your_app_password   # Use a Google App Password (see below)
 MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS="homekonnect247@gmail.com"
+MAIL_FROM_ADDRESS="no-reply@yourdomain.com"  # or your Gmail
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 
@@ -198,6 +198,8 @@ If you're using 2-factor authentication:
 2. Security → 2-Step Verification
 3. App passwords → Generate new password
 4. Use this password in `MAIL_PASSWORD`
+
+Security note: Don’t commit real credentials or secrets to your repository. The examples above use placeholders.
 
 ### Testing in Development
 

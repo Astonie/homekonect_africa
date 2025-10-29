@@ -27,6 +27,26 @@
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
             @include('layouts.navigation')
 
+            @auth
+                @if (! auth()->user()->hasVerifiedEmail())
+                    <div class="bg-yellow-50 dark:bg-yellow-900/30 border-b border-yellow-200 dark:border-yellow-800">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                <div class="text-sm text-yellow-900 dark:text-yellow-200">
+                                    Please verify your email address to unlock all features. A verification link was sent to your email.
+                                </div>
+                                <form method="POST" action="{{ route('verification.send') }}">
+                                    @csrf
+                                    <button type="submit" class="inline-flex items-center rounded-md bg-yellow-600 px-3 py-1.5 text-sm font-medium text-white shadow hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                                        Resend Verification Email
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endauth
+
             <!-- Page Heading -->
             @isset($header)
                 <header class="bg-white dark:bg-gray-800 shadow border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
