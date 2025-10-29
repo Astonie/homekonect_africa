@@ -44,6 +44,31 @@
                             </div>
                         </div>
                     </div>
+                @else
+                    @php($u = auth()->user())
+                    @if (in_array($u->role, ['agent','landlord']) && !($u->is_verified && $u->verification_status === 'verified') && !request()->routeIs('kyc.*'))
+                        <div class="bg-blue-50 dark:bg-blue-900/30 border-b border-blue-200 dark:border-blue-800">
+                            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                    <div class="text-sm text-blue-900 dark:text-blue-100">
+                                        Your KYC verification is required before you can list properties.
+                                        @if($u->kycVerification)
+                                            Current status: <span class="font-semibold">{{ ucfirst($u->verification_status ?? 'pending') }}</span>
+                                        @else
+                                            You haven't submitted your KYC yet.
+                                        @endif
+                                    </div>
+                                    <div class="flex gap-2">
+                                        @if($u->kycVerification)
+                                            <a href="{{ route('kyc.status') }}" class="inline-flex items-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">View KYC Status</a>
+                                        @else
+                                            <a href="{{ route('kyc.create') }}" class="inline-flex items-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Complete KYC</a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 @endif
             @endauth
 
