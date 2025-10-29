@@ -22,8 +22,14 @@ class EnsureKycVerified
             return $next($request);
         }
 
-        // If user is not verified
-        if (!$user->is_verified) {
+        // Require email verification first
+        if (! $user->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice')
+                ->with('error', 'Please verify your email address first.');
+        }
+
+        // If user is not KYC verified
+        if (!($user->is_verified && $user->verification_status === 'verified')) {
             // Check if KYC has been submitted
             $kyc = $user->kycVerification;
 
@@ -33,17 +39,21 @@ class EnsureKycVerified
                     ->with('warning', 'Please complete your KYC verification to access this feature.');
             }
 
-            if ($kyc->isPending()) {
+            if (method_exists($kyc, 'isPending') && $kyc->isPending()) {
                 // KYC is pending - show status page
                 return redirect()->route('kyc.status')
                     ->with('info', 'Your KYC verification is under review. You will be notified once approved.');
             }
 
-            if ($kyc->isRejected() || $kyc->needsResubmission()) {
+            if ((method_exists($kyc, 'isRejected') && $kyc->isRejected()) || (method_exists($kyc, 'needsResubmission') && $kyc->needsResubmission())) {
                 // KYC was rejected - redirect to resubmit
                 return redirect()->route('kyc.create')
                     ->with('error', 'Your KYC verification was rejected. Please review the feedback and resubmit.');
             }
+
+            // Fallback to status if state is unknown
+            return redirect()->route('kyc.status')
+                ->with('info', 'Your KYC status is being reviewed.');
         }
 
         return $next($request);

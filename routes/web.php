@@ -89,7 +89,7 @@ Route::middleware(['auth', 'verified', 'role:tenant'])->prefix('tenant')->name('
 // Landlord Routes
 Route::middleware(['auth', 'verified', 'role:landlord'])->prefix('landlord')->name('landlord.')->group(function () {
     Route::get('/dashboard', [LandlordDashboardController::class, 'index'])->name('dashboard');
-    Route::resource('properties', LandlordPropertyController::class);
+    Route::resource('properties', LandlordPropertyController::class)->middleware('kyc.verified');
     
     // Document Management
     Route::resource('documents', \App\Http\Controllers\Landlord\DocumentController::class);
@@ -99,7 +99,7 @@ Route::middleware(['auth', 'verified', 'role:landlord'])->prefix('landlord')->na
 // Agent Routes
 Route::middleware(['auth', 'verified', 'role:agent'])->prefix('agent')->name('agent.')->group(function () {
     Route::get('/dashboard', [AgentDashboardController::class, 'index'])->name('dashboard');
-    Route::resource('properties', AgentPropertyController::class);
+    Route::resource('properties', AgentPropertyController::class)->middleware('kyc.verified');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

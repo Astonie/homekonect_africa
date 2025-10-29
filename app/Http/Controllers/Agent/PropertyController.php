@@ -26,6 +26,13 @@ class PropertyController extends Controller
      */
     public function create()
     {
+        $user = auth()->user();
+        if (!$user->canListProperties()) {
+            $route = $user->kycVerification ? 'kyc.status' : 'kyc.create';
+            return redirect()->route($route)
+                ->with('error', 'You must complete and verify KYC before listing properties.');
+        }
+
         return view('agent.properties.create');
     }
 
@@ -34,6 +41,13 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
+        $user = auth()->user();
+        if (!$user->canListProperties()) {
+            $route = $user->kycVerification ? 'kyc.status' : 'kyc.create';
+            return redirect()->route($route)
+                ->with('error', 'You must complete and verify KYC before listing properties.');
+        }
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
