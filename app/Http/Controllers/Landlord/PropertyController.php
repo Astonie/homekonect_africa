@@ -210,10 +210,10 @@ class PropertyController extends Controller
                 if (isset($currentImages[$index])) {
                     // Delete physical file if it exists
                     $imagePath = is_array($currentImages[$index]) ? 
-                        ($currentImages[$index]['path'] ?? $currentImages[$index]) : 
+                        ($currentImages[$index]['path'] ?? '') : 
                         $currentImages[$index];
                     
-                    if (str_starts_with($imagePath, '/storage/')) {
+                    if (is_string($imagePath) && str_starts_with($imagePath, '/storage/')) {
                         $filePath = str_replace('/storage/', '', $imagePath);
                         Storage::disk('public')->delete($filePath);
                     }
