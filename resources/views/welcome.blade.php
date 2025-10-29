@@ -414,7 +414,10 @@
                         <a href="{{ route('properties.show', $property->slug) }}" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 border border-gray-100 dark:border-gray-700">
                             <div class="relative h-64 overflow-hidden">
                                 @php
-                                    $firstImage = $property->images[0] ?? null;
+                                    $imageData = $property->images[0] ?? null;
+                                    // Extract path from array or use string directly
+                                    $firstImage = is_array($imageData) ? ($imageData['path'] ?? '') : $imageData;
+                                    
                                     if ($firstImage) {
                                         if (filter_var($firstImage, FILTER_VALIDATE_URL)) {
                                             $imageUrl = $firstImage;

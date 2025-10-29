@@ -326,7 +326,10 @@
                                 <a href="{{ route('properties.show', $property->slug) }}" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 group">
                                     <div class="relative h-64 overflow-hidden">
                                         @php
-                                            $firstImage = $property->images[0] ?? null;
+                                            $imageData = $property->images[0] ?? null;
+                                            // Extract path from array or use string directly
+                                            $firstImage = is_array($imageData) ? ($imageData['path'] ?? '') : $imageData;
+                                            
                                             if ($firstImage) {
                                                 if (filter_var($firstImage, FILTER_VALIDATE_URL)) {
                                                     $imageUrl = $firstImage;
@@ -420,7 +423,10 @@
                                 <a href="{{ route('properties.show', $property->slug) }}" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 group flex flex-col md:flex-row">
                                     <div class="relative md:w-80 h-64 md:h-auto flex-shrink-0 overflow-hidden">
                                         @php
-                                            $firstImage = $property->images[0] ?? null;
+                                            $imageData = $property->images[0] ?? null;
+                                            // Extract path from array or use string directly
+                                            $firstImage = is_array($imageData) ? ($imageData['path'] ?? '') : $imageData;
+                                            
                                             if ($firstImage) {
                                                 if (filter_var($firstImage, FILTER_VALIDATE_URL)) {
                                                     $imageUrl = $firstImage;
