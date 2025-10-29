@@ -400,17 +400,96 @@
 
                 <!-- Property Images -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                    <div class="p-6">
+                    <div class="p-6" x-data="imageManager()">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Property Images</h3>
                         
+                        <!-- Existing Images -->
+                        @if($property->images && count($property->images) > 0)
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Current Images</label>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    @foreach($property->images as $index => $image)
+                                        @php
+                                            $imagePath = is_array($image) ? ($image['path'] ?? $image) : $image;
+                                            $isFeatured = is_array($image) && isset($image['is_featured']) && $image['is_featured'];
+                                        @endphp
+                                        <div class="relative group" x-data="{ deleted: false }">
+                                            <img src="{{ $imagePath }}" class="w-full h-40 object-cover rounded-lg border-2" 
+                                                :class="deleted ? 'opacity-30 border-red-500' : '{{ $isFeatured ? "border-blue-500" : "border-gray-300" }}'">
+                                            
+                                            @if($isFeatured)
+                                                <div class="absolute top-2 left-2 bg-blue-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                                                    Featured
+                                                </div>
+                                            @endif
+                                            
+                                            <!-- Delete Overlay -->
+                                            <div x-show="deleted" class="absolute inset-0 flex items-center justify-center bg-red-500 bg-opacity-20 rounded-lg">
+                                                <span class="text-red-600 font-bold text-sm bg-white px-3 py-1 rounded">DELETED</span>
+                                            </div>
+                                            
+                                            <!-- Action Buttons -->
+                                            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all rounded-lg flex items-center justify-center space-x-2 opacity-0 group-hover:opacity-100">
+                                                <button type="button" @click="deleted = !deleted" 
+                                                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs font-semibold">
+                                                    <span x-text="deleted ? 'Undo' : 'Delete'"></span>
+                                                </button>
+                                            </div>
+                                            
+                                            <!-- Hidden input to track deletion -->
+                                            <input type="hidden" :name="deleted ? 'delete_images[]' : ''" value="{{ $index }}">
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <p class="text-xs text-gray-500 mt-2">Click "Delete" to remove images. Click "Undo" to restore.</p>
+                            </div>
+                        @endif
+                        
+                        <!-- Add New Images -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Upload Images</label>
-                            <input type="file" name="images[]" accept="image/*" multiple
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Add New Images</label>
+                            <input type="file" accept="image/*" multiple
+                                @change="handleFiles($event)"
                                 class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                             <p class="text-xs text-gray-500 mt-1">You can select multiple images. JPG, PNG (Max 5MB each)</p>
                             @error('images.*')
                                 <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                             @enderror
+                            
+                            <!-- New Images Preview Grid -->
+                            <div x-show="newImages.length > 0" class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <template x-for="(image, index) in newImages" :key="index">
+                                    <div class="relative group">
+                                        <img :src="image.preview" class="w-full h-40 object-cover rounded-lg border-2" 
+                                            :class="image.isFeatured ? 'border-blue-500' : 'border-gray-300'">
+                                        
+                                        <!-- Featured Badge -->
+                                        <div x-show="image.isFeatured" class="absolute top-2 left-2 bg-blue-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                                            Featured
+                                        </div>
+                                        
+                                        <!-- Action Buttons -->
+                                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all rounded-lg flex items-center justify-center space-x-2 opacity-0 group-hover:opacity-100">
+                                            <button type="button" @click="setFeatured(index)" 
+                                                class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-semibold">
+                                                <span x-text="image.isFeatured ? 'Featured' : 'Set Featured'"></span>
+                                            </button>
+                                            <button type="button" @click="removeImage(index)" 
+                                                class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs font-semibold">
+                                                Remove
+                                            </button>
+                                        </div>
+
+                                        <!-- Hidden input for this image -->
+                                        <input type="hidden" :name="'new_property_images[' + index + '][file]'" :value="image.base64">
+                                        <input type="hidden" :name="'new_property_images[' + index + '][is_featured]'" :value="image.isFeatured ? '1' : '0'">
+                                    </div>
+                                </template>
+                            </div>
+
+                            <p x-show="newImages.length > 0" class="text-sm text-gray-600 mt-4">
+                                <span class="font-semibold" x-text="newImages.length"></span> new image(s) selected.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -455,4 +534,43 @@
             </form>
         </div>
     </div>
+
+    <script>
+        function imageManager() {
+            return {
+                newImages: [],
+                
+                handleFiles(event) {
+                    const files = Array.from(event.target.files);
+                    
+                    files.forEach((file, idx) => {
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            
+                            reader.onload = (e) => {
+                                this.newImages.push({
+                                    preview: e.target.result,
+                                    base64: e.target.result,
+                                    isFeatured: false
+                                });
+                            };
+                            
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                },
+                
+                setFeatured(index) {
+                    // Remove featured from all new images
+                    this.newImages.forEach(img => img.isFeatured = false);
+                    // Set this image as featured
+                    this.newImages[index].isFeatured = true;
+                },
+                
+                removeImage(index) {
+                    this.newImages.splice(index, 1);
+                }
+            }
+        }
+    </script>
 </x-app-dashboard>

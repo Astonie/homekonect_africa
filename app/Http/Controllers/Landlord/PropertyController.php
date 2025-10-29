@@ -193,7 +193,63 @@ class PropertyController extends Controller
             'price' => 'required|numeric|min:0',
             'furnished' => 'required|boolean',
             'amenities' => 'nullable|array',
+            'currency_id' => 'nullable|exists:currencies,id',
+            'delete_images' => 'nullable|array',
+            'new_property_images' => 'nullable|array',
+            'new_property_images.*.file' => 'nullable|string',
+            'new_property_images.*.is_featured' => 'nullable|in:0,1',
         ]);
+
+        // Handle image deletions
+        if ($request->has('delete_images')) {
+            $currentImages = $property->images ?? [];
+            $deleteIndices = $request->input('delete_images');
+            
+            // Remove deleted images from array
+            foreach ($deleteIndices as $index) {
+                if (isset($currentImages[$index])) {
+                    // Delete physical file if it exists
+                    $imagePath = is_array($currentImages[$index]) ? 
+                        ($currentImages[$index]['path'] ?? $currentImages[$index]) : 
+                        $currentImages[$index];
+                    
+                    if (str_starts_with($imagePath, '/storage/')) {
+                        $filePath = str_replace('/storage/', '', $imagePath);
+                        Storage::disk('public')->delete($filePath);
+                    }
+                    
+                    unset($currentImages[$index]);
+                }
+            }
+            
+            // Reindex array
+            $validated['images'] = array_values($currentImages);
+        }
+
+        // Handle new images
+        if ($request->has('new_property_images')) {
+            $currentImages = $property->images ?? [];
+            
+            foreach ($request->input('new_property_images', []) as $img) {
+                if (isset($img['file']) && strpos($img['file'], 'data:image') === 0) {
+                    $imageData = $img['file'];
+                    $image = str_replace(' ', '+', $imageData);
+                    $image_parts = explode(';base64,', $image);
+                    $image_type_aux = explode('image/', $image_parts[0]);
+                    $image_type = $image_type_aux[1] ?? 'png';
+                    $image_base64 = base64_decode($image_parts[1]);
+                    $fileName = 'properties/images/' . uniqid() . '.' . $image_type;
+                    Storage::disk('public')->put($fileName, $image_base64);
+                    
+                    $currentImages[] = [
+                        'path' => Storage::url($fileName),
+                        'is_featured' => $img['is_featured'] == '1',
+                    ];
+                }
+            }
+            
+            $validated['images'] = $currentImages;
+        }
 
         $property->update($validated);
 
