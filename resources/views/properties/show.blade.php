@@ -101,14 +101,19 @@
                             <div class="relative h-96 bg-gray-900 dark:bg-gray-950">
                                 @foreach($property->images as $index => $image)
                                     @php
-                                        if (filter_var($image, FILTER_VALIDATE_URL)) {
-                                            $imageUrl = $image;
-                                        } elseif (Str::startsWith($image, 'http')) {
-                                            $imageUrl = $image;
-                                        } elseif (Str::startsWith($image, 'uploads/')) {
-                                            $imageUrl = asset($image);
+                                        // Handle both old format (string) and new format (array with path)
+                                        $imagePath = is_array($image) ? ($image['path'] ?? $image) : $image;
+                                        
+                                        if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+                                            $imageUrl = $imagePath;
+                                        } elseif (Str::startsWith($imagePath, 'http')) {
+                                            $imageUrl = $imagePath;
+                                        } elseif (Str::startsWith($imagePath, 'uploads/')) {
+                                            $imageUrl = asset($imagePath);
+                                        } elseif (Str::startsWith($imagePath, '/storage/')) {
+                                            $imageUrl = $imagePath;
                                         } else {
-                                            $imageUrl = Storage::url($image);
+                                            $imageUrl = Storage::url($imagePath);
                                         }
                                     @endphp
                                     <img x-show="selectedImage === {{ $index }}" 
@@ -146,19 +151,30 @@
                                     <div class="grid grid-cols-5 gap-3">
                                         @foreach($property->images as $index => $image)
                                             @php
-                                                if (filter_var($image, FILTER_VALIDATE_URL)) {
-                                                    $thumbUrl = $image;
-                                                } elseif (Str::startsWith($image, 'http')) {
-                                                    $thumbUrl = $image;
-                                                } elseif (Str::startsWith($image, 'uploads/')) {
-                                                    $thumbUrl = asset($image);
+                                                // Handle both old format (string) and new format (array with path)
+                                                $imagePath = is_array($image) ? ($image['path'] ?? $image) : $image;
+                                                $isFeatured = is_array($image) && isset($image['is_featured']) && $image['is_featured'];
+                                                
+                                                if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+                                                    $thumbUrl = $imagePath;
+                                                } elseif (Str::startsWith($imagePath, 'http')) {
+                                                    $thumbUrl = $imagePath;
+                                                } elseif (Str::startsWith($imagePath, 'uploads/')) {
+                                                    $thumbUrl = asset($imagePath);
+                                                } elseif (Str::startsWith($imagePath, '/storage/')) {
+                                                    $thumbUrl = $imagePath;
                                                 } else {
-                                                    $thumbUrl = Storage::url($image);
+                                                    $thumbUrl = Storage::url($imagePath);
                                                 }
                                             @endphp
                                             <button @click="selectedImage = {{ $index }}" 
                                                     :class="selectedImage === {{ $index }} ? 'ring-4 ring-blue-500' : 'ring-2 ring-gray-200 dark:ring-gray-600'"
                                                     class="relative h-20 rounded-lg overflow-hidden hover:ring-4 hover:ring-blue-400 transition">
+                                                @if($isFeatured)
+                                                    <div class="absolute top-1 left-1 bg-blue-500 text-white px-1 py-0.5 rounded text-xs font-semibold z-10">
+                                                        ★
+                                                    </div>
+                                                @endif
                                                 <img src="{{ $thumbUrl }}" 
                                                      alt="Thumbnail {{ $index + 1 }}" 
                                                      class="w-full h-full object-cover"
@@ -380,14 +396,19 @@
                                     @php
                                         $firstImage = $similar->images[0] ?? null;
                                         if ($firstImage) {
-                                            if (filter_var($firstImage, FILTER_VALIDATE_URL)) {
-                                                $imageUrl = $firstImage;
-                                            } elseif (Str::startsWith($firstImage, 'http')) {
-                                                $imageUrl = $firstImage;
-                                            } elseif (Str::startsWith($firstImage, 'uploads/')) {
-                                                $imageUrl = asset($firstImage);
+                                            // Handle both old format (string) and new format (array with path)
+                                            $imagePath = is_array($firstImage) ? ($firstImage['path'] ?? $firstImage) : $firstImage;
+                                            
+                                            if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+                                                $imageUrl = $imagePath;
+                                            } elseif (Str::startsWith($imagePath, 'http')) {
+                                                $imageUrl = $imagePath;
+                                            } elseif (Str::startsWith($imagePath, 'uploads/')) {
+                                                $imageUrl = asset($imagePath);
+                                            } elseif (Str::startsWith($imagePath, '/storage/')) {
+                                                $imageUrl = $imagePath;
                                             } else {
-                                                $imageUrl = Storage::url($firstImage);
+                                                $imageUrl = Storage::url($imagePath);
                                             }
                                         } else {
                                             $imageUrl = 'https://via.placeholder.com/400x300?text=No+Image';

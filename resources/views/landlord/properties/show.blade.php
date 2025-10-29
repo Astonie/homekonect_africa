@@ -66,7 +66,19 @@
                                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Property Images</h3>
                                 <div class="grid grid-cols-2 gap-4">
                                     @foreach($property->images as $image)
-                                        <img src="{{ Storage::url($image) }}" alt="{{ $property->title }}" class="w-full h-48 object-cover rounded-lg">
+                                        @php
+                                            // Handle both old format (string) and new format (array with path)
+                                            $imagePath = is_array($image) ? ($image['path'] ?? $image) : $image;
+                                            $isFeatured = is_array($image) && isset($image['is_featured']) && $image['is_featured'];
+                                        @endphp
+                                        <div class="relative">
+                                            <img src="{{ $imagePath }}" alt="{{ $property->title }}" class="w-full h-48 object-cover rounded-lg {{ $isFeatured ? 'ring-4 ring-blue-500' : '' }}">
+                                            @if($isFeatured)
+                                                <div class="absolute top-2 left-2 bg-blue-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                                                    Featured
+                                                </div>
+                                            @endif
+                                        </div>
                                     @endforeach
                                 </div>
                             </div>
