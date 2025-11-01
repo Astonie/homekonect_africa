@@ -15,6 +15,15 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    
+                    <x-nav-link :href="route('messages.index')" :active="request()->routeIs('messages.*')" class="relative">
+                        {{ __('Messages') }}
+                        @if(Auth::user()->unreadMessagesCount() > 0)
+                            <span class="absolute -top-1 -right-1 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-600 rounded-full">
+                                {{ Auth::user()->unreadMessagesCount() }}
+                            </span>
+                        @endif
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -69,6 +78,15 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            
+            <x-responsive-nav-link :href="route('messages.index')" :active="request()->routeIs('messages.*')" class="flex items-center justify-between">
+                <span>{{ __('Messages') }}</span>
+                @if(Auth::user()->unreadMessagesCount() > 0)
+                    <span class="inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-600 rounded-full">
+                        {{ Auth::user()->unreadMessagesCount() }}
+                    </span>
+                @endif
             </x-responsive-nav-link>
         </div>
 

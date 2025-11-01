@@ -39,6 +39,15 @@ Route::get('/contact', [ContactController::class, 'show'])->name('contact.show')
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 Route::post('/properties/{property}/inquiry', [ContactController::class, 'sendInquiry'])->name('properties.inquiry');
 
+// Messages Routes (Protected)
+Route::middleware(['auth', 'verified'])->prefix('messages')->name('messages.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\MessagesController::class, 'index'])->name('index');
+    Route::get('/{conversation}', [\App\Http\Controllers\MessagesController::class, 'show'])->name('show');
+    Route::post('/{conversation}/send', [\App\Http\Controllers\MessagesController::class, 'sendMessage'])->name('send');
+    Route::post('/property/{property}/start', [\App\Http\Controllers\MessagesController::class, 'startConversation'])->name('start');
+    Route::delete('/{conversation}', [\App\Http\Controllers\MessagesController::class, 'destroy'])->name('destroy');
+});
+
 Route::get('/dashboard', function () {
     $user = auth()->user();
     
