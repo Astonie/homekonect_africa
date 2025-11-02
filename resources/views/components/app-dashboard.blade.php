@@ -31,7 +31,7 @@
     <aside :class="sidebarOpen ? 'w-64' : 'w-20'" class="bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 text-white flex-shrink-0 transition-all duration-300 ease-in-out shadow-2xl border-r border-gray-800 dark:border-gray-700">
         <div class="flex flex-col h-full">
             <!-- Logo Section -->
-            <div class="p-6">
+            <div class="p-6 flex-shrink-0">
                 <!-- Expanded Logo -->
                 <div class="flex items-center space-x-3 mb-8" x-show="sidebarOpen" x-transition>
                     <x-logo size="default" class="flex-shrink-0" />
@@ -45,12 +45,13 @@
                 <div class="flex justify-center mb-8" x-show="!sidebarOpen" x-transition x-cloak>
                     <x-logo size="default" class="flex-shrink-0" />
                 </div>
+            </div>
 
-                <!-- Navigation Slot -->
-                <nav class="space-y-2">
-                    @isset($navigation)
-                        {{ $navigation }}
-                    @else
+            <!-- Navigation Slot - Scrollable -->
+            <nav class="flex-1 overflow-y-auto px-6 space-y-2 pb-4">
+                @isset($navigation)
+                    {{ $navigation }}
+                @else
                         @php $role = Auth::user()->role; @endphp
                         @if($role === 'admin')
                             <a href="{{ route('admin.dashboard') }}" class="flex items-center px-4 py-3 bg-gray-800 rounded-lg text-purple-400 transition-all duration-200 hover:bg-gray-700 transform hover:scale-105">
@@ -94,10 +95,9 @@
                         {{-- Add other roles here as needed --}}
                     @endisset
                 </nav>
-            </div>
 
             <!-- Collapse Button -->
-            <div class="p-4 border-t border-gray-700 dark:border-gray-600 mt-auto">
+            <div class="p-4 border-t border-gray-700 dark:border-gray-600 flex-shrink-0">
                 <button @click="sidebarOpen = !sidebarOpen" class="w-full flex items-center justify-center px-4 py-2 rounded-lg bg-gray-800 dark:bg-gray-700 hover:bg-gray-700 dark:hover:bg-gray-600 transition">
                     <svg :class="!sidebarOpen && 'rotate-180'" class="w-5 h-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
