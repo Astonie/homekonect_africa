@@ -105,19 +105,42 @@ class MessagesController extends Controller
         }
 
         $request->validate([
-            'message' => 'required|string|max:1000',
+            'message' => 'required_without:attachment|string|max:1000',
+            'attachment' => 'nullable|file|max:20480|mimes:jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx,txt,zip,rar',
         ]);
 
-        Message::create([
+        $messageData = [
             'conversation_id' => $conversation->id,
             'sender_id' => Auth::id(),
-            'message' => $request->message,
-        ]);
+            'message' => $request->message ?? '',
+            'message_type' => 'text',
+        ];
+
+        // Handle file attachment
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            
+            // Store file in storage/app/messages/attachments
+            $path = $file->store('messages/attachments', 'public');
+            
+            $messageData['message_type'] = 'file';
+            $messageData['attachment_path'] = $path;
+            $messageData['attachment_name'] = $file->getClientOriginalName();
+            $messageData['attachment_type'] = $file->getMimeType();
+            $messageData['attachment_size'] = $file->getSize();
+            
+            // If no message text, set a default message
+            if (empty($messageData['message'])) {
+                $messageData['message'] = '📎 Sent an attachment';
+            }
+        }
+
+        Message::create($messageData);
 
         // Update conversation last message time
         $conversation->update(['last_message_at' => now()]);
 
-        return back()->with('success', 'Message sent!');
+        return back();
     }
 
     /**
@@ -134,5 +157,30 @@ class MessagesController extends Controller
 
         return redirect()->route('messages.index')
             ->with('success', 'Conversation deleted successfully!');
+    }
+
+    /**
+     * Download message attachment
+     */
+    public function downloadAttachment(Message $message)
+    {
+        // Check if user is part of this conversation
+        $conversation = $message->conversation;
+        if ($conversation->sender_id !== Auth::id() && $conversation->receiver_id !== Auth::id()) {
+            abort(403, 'Unauthorized access to this attachment.');
+        }
+
+        // Check if message has attachment
+        if (!$message->hasAttachment()) {
+            abort(404, 'Attachment not found.');
+        }
+
+        $filePath = storage_path('app/public/' . $message->attachment_path);
+        
+        if (!file_exists($filePath)) {
+            abort(404, 'File not found.');
+        }
+
+        return response()->download($filePath, $message->attachment_name);
     }
 }

@@ -46,6 +46,7 @@ Route::middleware(['auth', 'verified'])->prefix('messages')->name('messages.')->
     Route::post('/{conversation}/send', [\App\Http\Controllers\MessagesController::class, 'sendMessage'])->name('send');
     Route::post('/property/{property}/start', [\App\Http\Controllers\MessagesController::class, 'startConversation'])->name('start');
     Route::delete('/{conversation}', [\App\Http\Controllers\MessagesController::class, 'destroy'])->name('destroy');
+    Route::get('/attachment/{message}', [\App\Http\Controllers\MessagesController::class, 'downloadAttachment'])->name('attachment.download');
 });
 
 Route::get('/dashboard', function () {
