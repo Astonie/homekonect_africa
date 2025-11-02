@@ -14,6 +14,13 @@ class AgentDashboardController extends Controller
             abort(403, 'Unauthorized access.');
         }
 
-        return view('agent.dashboard');
+        $stats = [
+            'total_clients' => auth()->user()->clients()->count(),
+            'active_clients' => auth()->user()->clients()->where('status', 'active')->count(),
+            'properties_listed' => auth()->user()->properties()->count(),
+            'deals_closed' => 0, // To be implemented
+        ];
+
+        return view('agent.dashboard', compact('stats'));
     }
 }

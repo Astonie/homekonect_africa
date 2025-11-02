@@ -123,6 +123,7 @@ Route::middleware(['auth', 'verified', 'role:landlord'])->prefix('landlord')->na
 Route::middleware(['auth', 'verified', 'role:agent'])->prefix('agent')->name('agent.')->group(function () {
     Route::get('/dashboard', [AgentDashboardController::class, 'index'])->name('dashboard');
     Route::resource('properties', AgentPropertyController::class)->middleware('kyc.verified');
+    Route::resource('clients', \App\Http\Controllers\Agent\ClientController::class);
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

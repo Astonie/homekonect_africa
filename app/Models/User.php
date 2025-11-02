@@ -185,6 +185,22 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get clients for this agent
+     */
+    public function clients()
+    {
+        return $this->hasMany(Client::class, 'agent_id');
+    }
+
+    /**
+     * Get the properties owned by the user.
+     */
+    public function properties()
+    {
+        return $this->hasMany(Property::class, 'user_id');
+    }
+
+    /**
      * Send the password reset notification.
      *
      * @param  string  $token
