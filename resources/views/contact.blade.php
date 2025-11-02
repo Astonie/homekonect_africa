@@ -69,11 +69,23 @@
                     <div class="mt-6 space-y-4 text-sm text-gray-700 dark:text-gray-300">
                         <div>
                             <div class="font-medium">Email</div>
-                            <div>support@homekonnect.com</div>
+                            <div>{{ $siteSettings['contact_email'] }}</div>
                         </div>
+                        @if($siteSettings['contact_phone'])
+                        <div>
+                            <div class="font-medium">Phone</div>
+                            <div>{{ $siteSettings['contact_phone'] }}</div>
+                        </div>
+                        @endif
+                        @if($siteSettings['contact_address'])
+                        <div>
+                            <div class="font-medium">Address</div>
+                            <div>{{ $siteSettings['contact_address'] }}</div>
+                        </div>
+                        @endif
                         <div>
                             <div class="font-medium">Hours</div>
-                            <div>Mon–Fri, 9:00AM–6:00PM CAT</div>
+                            <div>{{ $siteSettings['contact_hours'] }}</div>
                         </div>
                     </div>
                 </div>

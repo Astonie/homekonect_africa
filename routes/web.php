@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\KycVerificationAdminController;
 use App\Http\Controllers\Admin\PropertyAdminController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Tenant\TenantDashboardController;
 use App\Http\Controllers\Landlord\LandlordDashboardController;
 use App\Http\Controllers\Landlord\PropertyController as LandlordPropertyController;
@@ -27,7 +28,15 @@ Route::get('/', function () {
     
     $teamMembers = \App\Models\TeamMember::active()->ordered()->get();
     
-    return view('welcome', compact('properties', 'teamMembers'));
+    // Calculate real statistics
+    $stats = [
+        'users' => \App\Models\User::where('email_verified_at', '!=', null)->count(),
+        'properties' => Property::count(),
+        'cities' => Property::distinct('city')->count('city'),
+        'satisfaction' => 98, // Can be updated with real review data later
+    ];
+    
+    return view('welcome', compact('properties', 'teamMembers', 'stats'));
 });
 
 // Public Property Routes
@@ -89,6 +98,10 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     
     // Team Management
     Route::resource('team', \App\Http\Controllers\Admin\TeamMemberController::class)->except(['show']);
+    
+    // Site Settings Management
+    Route::get('/site-settings', [AdminSettingsController::class, 'index'])->name('site-settings.index');
+    Route::patch('/site-settings', [AdminSettingsController::class, 'update'])->name('site-settings.update');
 });
 
 // Tenant Routes

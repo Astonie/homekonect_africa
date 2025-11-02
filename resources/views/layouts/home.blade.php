@@ -207,9 +207,13 @@
                 <div>
                     <h4 class="text-white font-semibold mb-4">Contact Us</h4>
                     <ul class="space-y-2 text-sm">
-                        <li>📧 info@homekonnect.com</li>
-                        <li>📞 +1 (555) 123-4567</li>
-                        <li>📍 123 Real Estate Ave, NY</li>
+                        <li>📧 {{ $siteSettings['contact_email'] ?? 'info@homekonnect.com' }}</li>
+                        @if(!empty($siteSettings['contact_phone']))
+                        <li>📞 {{ $siteSettings['contact_phone'] }}</li>
+                        @endif
+                        @if(!empty($siteSettings['contact_address']))
+                        <li>📍 {{ $siteSettings['contact_address'] }}</li>
+                        @endif
                     </ul>
                 </div>
             </div>

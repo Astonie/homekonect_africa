@@ -46,7 +46,7 @@
                     </h1>
                     
                     <p class="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto font-light">
-                        Connect with verified properties, trusted agents, and secure transactions across 45+ African cities
+                        Connect with verified properties, trusted agents, and secure transactions across {{ $stats['cities'] }}+ African cities
                     </p>
                 </div>
                 
@@ -69,31 +69,25 @@
                 <!-- Stats Cards -->
                 <div data-aos="fade-up" data-aos-delay="300" class="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6 pt-12 max-w-4xl mx-auto">
                     <div class="group bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-blue-500/50 shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-300 transform hover:-translate-y-2">
-                        <div class="text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">50K+</div>
+                        <div class="text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">{{ number_format($stats['users']) }}+</div>
                         <div class="text-sm text-gray-400 font-medium">Verified Users</div>
                     </div>
                     <div class="group bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-cyan-500/50 shadow-xl hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-300 transform hover:-translate-y-2">
-                        <div class="text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">15K+</div>
+                        <div class="text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">{{ number_format($stats['properties']) }}+</div>
                         <div class="text-sm text-gray-400 font-medium">Properties Listed</div>
                     </div>
                     <div class="group bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-purple-500/50 shadow-xl hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300 transform hover:-translate-y-2">
-                        <div class="text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">45+</div>
+                        <div class="text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">{{ $stats['cities'] }}+</div>
                         <div class="text-sm text-gray-400 font-medium">African Cities</div>
                     </div>
                     <div class="group bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-green-500/50 shadow-xl hover:shadow-2xl hover:shadow-green-500/20 transition-all duration-300 transform hover:-translate-y-2">
-                        <div class="text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">98%</div>
+                        <div class="text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">{{ $stats['satisfaction'] }}%</div>
                         <div class="text-sm text-gray-400 font-medium">Satisfaction Rate</div>
                     </div>
                 </div>
 
                 <!-- Trust Indicators -->
                 <div data-aos="fade-up" data-aos-delay="400" class="flex flex-wrap items-center justify-center gap-6 pt-8 text-gray-400 text-sm">
-                    <div class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                        </svg>
-                        <span>Secure Escrow Payments</span>
-                    </div>
                     <div class="flex items-center gap-2">
                         <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
@@ -183,11 +177,11 @@
                                         <!-- Quick Stats -->
                                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-gray-100 dark:border-gray-700">
                                             <div class="text-center">
-                                                <div class="text-2xl font-bold text-gray-900 dark:text-white">15K+</div>
+                                                <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ number_format($stats['properties']) }}+</div>
                                                 <div class="text-xs text-gray-600 dark:text-gray-400 font-medium">Properties</div>
                                             </div>
                                             <div class="text-center">
-                                                <div class="text-2xl font-bold text-gray-900 dark:text-white">45+</div>
+                                                <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ $stats['cities'] }}+</div>
                                                 <div class="text-xs text-gray-600 dark:text-gray-400 font-medium">Cities</div>
                                             </div>
                                             <div class="text-center">
