@@ -1,7 +1,20 @@
 <x-app-dashboard 
     title="Settings" 
-    subtitle="Manage your account settings and preferences">
+    subtitle="Manage your account settings and preferences"
+    role="{{ Auth::user()->role }}">
 
+    {{-- Navigation Slot --}}
+    <x-slot name="navigation">
+        @if(Auth::user()->role === 'landlord')
+            <x-navigation.landlord active="settings" />
+        @elseif(Auth::user()->role === 'agent')
+            <x-navigation.agent active="settings" />
+        @elseif(Auth::user()->role === 'tenant')
+            <x-navigation.tenant active="settings" />
+        @elseif(Auth::user()->role === 'admin')
+            <x-navigation.admin active="settings" />
+        @endif
+    </x-slot>
 
     {{-- Main Content --}}
     <div class="space-y-6" x-data="{ activeTab: 'profile' }">
