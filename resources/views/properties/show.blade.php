@@ -1,71 +1,11 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $property->title }} - HomeKonnect</title>
-    <meta name="description" content="{{ Str::limit($property->description, 160) }}">
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800" rel="stylesheet" />
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script>
-        // Initialize theme before page loads to prevent flash
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    </script>
-</head>
-<body class="font-sans antialiased bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-    <!-- Navigation -->
-    <nav class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <a href="/" class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center shadow-lg">
-                            <span class="text-white font-bold text-xl">H</span>
-                        </div>
-                        <span class="text-xl font-bold text-gray-900 dark:text-white">HomeKonnect</span>
-                    </a>
-                </div>
-                
-                <div class="flex items-center space-x-4">
-                    <!-- Dark Mode Toggle -->
-                    <button @click="darkMode = !darkMode" class="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <svg x-show="!darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-                        </svg>
-                        <svg x-show="darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                        </svg>
-                    </button>
-                    
-                    <a href="/" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition">
-                        <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                        </svg>
-                        Back to Home
-                    </a>
-                    @auth
-                        <a href="{{ route('dashboard') }}" class="bg-blue-600 dark:bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition">
-                            Dashboard
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium">Sign in</a>
-                        <a href="{{ route('register') }}" class="bg-blue-600 dark:bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition">
-                            Get Started
-                        </a>
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </nav>
+@extends('layouts.home')
 
-    <!-- Main Content -->
-    <main class="py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+@section('title', $property->title . ' - HomeKonnect')
+@section('meta_description', Str::limit($property->description, 160))
+
+@section('content')
+<div class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <!-- Breadcrumbs -->
             <nav class="mb-6" aria-label="Breadcrumb">
@@ -197,7 +137,7 @@
                     </div>
 
                     <!-- Property Details -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-colors duration-300 mb-4">
                         <div class="flex items-start justify-between mb-4">
                             <div>
                                 <div class="flex items-center space-x-3 mb-2">
@@ -259,11 +199,11 @@
                         <!-- Amenities -->
                         @if($property->amenities && count($property->amenities) > 0)
                             <div class="mt-6">
-                                <h2 class="text-xl font-bold text-gray-900 mb-3">Amenities</h2>
+                                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Amenities</h2>
                                 <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                                     @foreach($property->amenities as $amenity)
-                                        <div class="flex items-center space-x-2 text-gray-700">
-                                            <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
+                                            <svg class="w-5 h-5 text-green-500 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                             </svg>
                                             <span>{{ $amenity }}</span>
@@ -277,18 +217,18 @@
                         <div class="mt-6 grid grid-cols-2 gap-4">
                             @if($property->floors)
                                 <div>
-                                    <span class="text-sm text-gray-600">Number of Floors:</span>
-                                    <span class="ml-2 font-semibold text-gray-900">{{ $property->floors }}</span>
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Number of Floors:</span>
+                                    <span class="ml-2 font-semibold text-gray-900 dark:text-white">{{ $property->floors }}</span>
                                 </div>
                             @endif
                             <div>
-                                <span class="text-sm text-gray-600">Furnished:</span>
-                                <span class="ml-2 font-semibold text-gray-900">{{ $property->furnished ? 'Yes' : 'No' }}</span>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">Furnished:</span>
+                                <span class="ml-2 font-semibold text-gray-900 dark:text-white">{{ $property->furnished ? 'Yes' : 'No' }}</span>
                             </div>
                             @if($property->security_deposit)
                                 <div>
-                                    <span class="text-sm text-gray-600">Security Deposit:</span>
-                                    <span class="ml-2 font-semibold text-gray-900">${{ number_format($property->security_deposit, 2) }}</span>
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Security Deposit:</span>
+                                    <span class="ml-2 font-semibold text-gray-900 dark:text-white">${{ number_format($property->security_deposit, 2) }}</span>
                                 </div>
                             @endif
                             @if($property->available_from)
@@ -325,34 +265,25 @@
                         </div>
 
                         @auth
-                            <form method="POST" action="{{ route('properties.inquiry', $property) }}" class="space-y-4">
+                            <form method="POST" action="{{ route('messages.start', $property) }}" class="space-y-4">
                                 @csrf
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Your Name</label>
-                                    <input name="name" value="{{ old('name', auth()->user()->name) }}" required class="mt-1 w-full rounded-lg border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-100" />
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Send a Message</label>
+                                    <textarea name="message" rows="4" required maxlength="1000" class="w-full rounded-lg border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-100" placeholder="Hi, I'm interested in this property. Can you provide more details?">{{ old('message') }}</textarea>
+                                    @error('message')
+                                        <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
-                                    <input type="email" name="email" value="{{ old('email', auth()->user()->email) }}" required class="mt-1 w-full rounded-lg border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-100" />
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone (optional)</label>
-                                    <input name="phone" value="{{ old('phone') }}" class="mt-1 w-full rounded-lg border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-100" />
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Message</label>
-                                    <textarea name="message" rows="4" required class="mt-1 w-full rounded-lg border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-100" placeholder="I'm interested in {{ $property->title }}. Please contact me.">{{ old('message') }}</textarea>
-                                </div>
-                                <button type="submit" class="w-full bg-blue-600 dark:bg-blue-700 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition font-semibold">
+                                <button type="submit" class="w-full bg-blue-600 dark:bg-blue-700 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition font-semibold shadow-lg transform hover:scale-105">
                                     <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                                     </svg>
-                                    Send Inquiry
+                                    Start Conversation
                                 </button>
                             </form>
                         @else
                             <a href="{{ route('login') }}" class="block w-full bg-blue-600 dark:bg-blue-700 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition font-semibold text-center mb-3">
-                                Login to Contact
+                                Login to Send Message
                             </a>
                             <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
                                 Don't have an account? 
@@ -434,16 +365,6 @@
                 </div>
             @endif
 
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 dark:bg-gray-950 text-gray-300 dark:text-gray-400 py-12 mt-16 transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <p>&copy; 2025 HomeKonnect. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-</body>
-</html>
+    </div>
+</div>
+@endsection
