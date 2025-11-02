@@ -145,6 +145,46 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get conversations where user is the sender
+     */
+    public function sentConversations()
+    {
+        return $this->hasMany(Conversation::class, 'sender_id');
+    }
+
+    /**
+     * Get conversations where user is the receiver
+     */
+    public function receivedConversations()
+    {
+        return $this->hasMany(Conversation::class, 'receiver_id');
+    }
+
+    /**
+     * Get all conversations for the user
+     */
+    public function conversations()
+    {
+        return Conversation::where('sender_id', $this->id)
+            ->orWhere('receiver_id', $this->id)
+            ->orderBy('last_message_at', 'desc');
+    }
+
+    /**
+     * Get unread messages count
+     */
+    public function unreadMessagesCount()
+    {
+        return Message::whereHas('conversation', function ($query) {
+            $query->where('sender_id', $this->id)
+                ->orWhere('receiver_id', $this->id);
+        })
+        ->where('sender_id', '!=', $this->id)
+        ->where('is_read', false)
+        ->count();
+    }
+
+    /**
      * Send the password reset notification.
      *
      * @param  string  $token

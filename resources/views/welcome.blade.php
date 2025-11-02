@@ -1,170 +1,9 @@
-﻿<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home Konnect - Find Your Dream Home</title>
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800" rel="stylesheet" />
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script>
-        // Theme initialization script (runs before page render to prevent flash)
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    </script>
-</head>
-<body class="font-sans antialiased bg-gray-50 dark:bg-gray-900 transition-colors duration-300" x-data="{ mobileMenuOpen: false, scrolled: false }" 
-      @scroll.window="scrolled = (window.pageYOffset > 20)">
-    <!-- Modern Navigation -->
-    <nav class="fixed w-full z-50 transition-all duration-300"
-         :class="scrolled ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg shadow-lg border-b border-gray-200 dark:border-gray-800' : 'bg-transparent'">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <!-- Logo Section -->
-                <div class="flex items-center space-x-3 z-50">
-                    <a href="/" class="flex items-center space-x-3 group">
-                        <div class="relative">
-                            <x-logo size="default" 
-                                    :class="scrolled ? 'text-blue-600 dark:text-blue-500' : 'text-white'" 
-                                    class="transition-colors duration-300" />
-                            <div class="absolute inset-0 bg-blue-500/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full"></div>
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="text-xl font-bold transition-colors duration-300"
-                                  :class="scrolled ? 'text-gray-900 dark:text-white' : 'text-white'">
-                                HomeKonnect
-                            </span>
-                            <span class="text-xs font-medium transition-colors duration-300"
-                                  :class="scrolled ? 'text-gray-500 dark:text-gray-400' : 'text-gray-300'">
-                                Africa's Trusted Real Estate
-                            </span>
-                        </div>
-                    </a>
-                </div>
-                
-                <!-- Desktop Navigation Links -->
-                <div class="hidden lg:flex items-center space-x-1">
-                    <a href="/" 
-                       class="px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 relative group"
-                       :class="scrolled ? 'text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400' : 'text-white hover:text-blue-300'">
-                        Home
-                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 group-hover:w-full transition-all duration-300"></span>
-                    </a>
-                    <a href="#properties" 
-                       class="px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 relative group"
-                       :class="scrolled ? 'text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400' : 'text-white hover:text-blue-300'">
-                        Find Properties
-                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 group-hover:w-full transition-all duration-300"></span>
-                    </a>
-                    <a href="#about" 
-                       class="px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 relative group"
-                       :class="scrolled ? 'text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400' : 'text-white hover:text-blue-300'">
-                        About Us
-                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 group-hover:w-full transition-all duration-300"></span>
-                    </a>
-                    <a href="#contact" 
-                       class="px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 relative group"
-                       :class="scrolled ? 'text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400' : 'text-white hover:text-blue-300'">
-                        Contact
-                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 group-hover:w-full transition-all duration-300"></span>
-                    </a>
-                </div>
+﻿@extends('layouts.home')
 
-                <!-- Right Side: Theme Toggle & Auth Buttons -->
-                <div class="hidden lg:flex items-center space-x-3">
-                    <!-- Theme Toggle Button -->
-                    <button id="theme-toggle" type="button" 
-                            class="p-2.5 rounded-lg transition-all duration-200 hover:scale-110"
-                            :class="scrolled ? 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800' : 'text-white hover:bg-white/10'">
-                        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                        </svg>
-                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
-                        </svg>
-                    </button>
-                    
-                    <!-- Sign In Button -->
-                    <a href="{{ route('login') }}" 
-                       class="px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 hover:scale-105"
-                       :class="scrolled ? 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800' : 'text-white hover:bg-white/10'">
-                        Sign in
-                    </a>
-                    
-                    <!-- Get Started Button -->
-                    <a href="{{ route('register') }}" 
-                       class="px-6 py-2.5 rounded-lg font-semibold text-sm text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl hover:shadow-blue-500/50 transition-all duration-200 hover:scale-105 flex items-center space-x-2">
-                        <span>Get Started</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                        </svg>
-                    </a>
-                </div>
+@section('title', 'Home Konnect - Find Your Dream Home')
+@section('main_classes', '')
 
-                <!-- Mobile Menu Button -->
-                <button @click="mobileMenuOpen = !mobileMenuOpen" 
-                        class="lg:hidden p-2 rounded-lg transition-all duration-200 z-50"
-                        :class="scrolled ? 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800' : 'text-white hover:bg-white/10'">
-                    <svg x-show="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                    <svg x-show="mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div x-show="mobileMenuOpen" 
-             x-transition:enter="transition ease-out duration-200"
-             x-transition:enter-start="opacity-0 -translate-y-4"
-             x-transition:enter-end="opacity-100 translate-y-0"
-             x-transition:leave="transition ease-in duration-150"
-             x-transition:leave-start="opacity-100 translate-y-0"
-             x-transition:leave-end="opacity-0 -translate-y-4"
-             @click.away="mobileMenuOpen = false"
-             class="lg:hidden absolute top-full left-0 right-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-xl">
-            <div class="px-4 py-6 space-y-1 max-w-7xl mx-auto">
-                <a href="/" 
-                   @click="mobileMenuOpen = false"
-                   class="block px-4 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200">
-                    Home
-                </a>
-                <a href="#properties" 
-                   @click="mobileMenuOpen = false"
-                   class="block px-4 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200">
-                    Find Properties
-                </a>
-                <a href="#about" 
-                   @click="mobileMenuOpen = false"
-                   class="block px-4 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200">
-                    About Us
-                </a>
-                <a href="#contact" 
-                   @click="mobileMenuOpen = false"
-                   class="block px-4 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200">
-                    Contact
-                </a>
-                
-                <div class="pt-4 space-y-2 border-t border-gray-200 dark:border-gray-800">
-                    <a href="{{ route('login') }}" 
-                       @click="mobileMenuOpen = false"
-                       class="block px-4 py-3 rounded-lg text-center text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 font-semibold transition-colors duration-200">
-                        Sign in
-                    </a>
-                    <a href="{{ route('register') }}" 
-                       @click="mobileMenuOpen = false"
-                       class="block px-4 py-3 rounded-lg text-center text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 font-semibold shadow-lg transition-all duration-200">
-                        Get Started
-                    </a>
-                </div>
-            </div>
-        </div>
-    </nav>
+@section('content')
     <!-- Hero Section -->
     <section class="relative min-h-screen flex items-center overflow-hidden">
         <!-- Background Image -->
@@ -411,7 +250,7 @@
             @if($properties->count() > 0)
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach($properties as $property)
-                        <a href="{{ route('properties.show', $property->slug) }}" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 border border-gray-100 dark:border-gray-700">
+                        <a href="{{ route('properties.show', $property->slug) }}" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 group border border-gray-100 dark:border-gray-700">
                             <div class="relative h-64 overflow-hidden">
                                 @php
                                     $imageData = $property->images[0] ?? null;
@@ -432,40 +271,74 @@
                                         $imageUrl = 'https://via.placeholder.com/800x600?text=No+Image';
                                     }
                                 @endphp
-                                <img src="{{ $imageUrl }}" alt="{{ $property->title }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300" onerror="this.src='https://via.placeholder.com/800x600?text=No+Image'">
-                                @if($property->is_featured)
-                                    <span class="absolute top-4 left-4 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">Featured</span>
-                                @endif
-                                <span class="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                                    {{ ucfirst($property->listing_type) }}
-                                </span>
+                                <img src="{{ $imageUrl }}" alt="{{ $property->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.src='https://via.placeholder.com/800x600?text=No+Image'">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                                
+                                <!-- Badges -->
+                                <div class="absolute top-4 left-4 flex flex-col gap-2">
+                                    @if($property->is_featured)
+                                        <span class="inline-flex items-center bg-gradient-to-r from-yellow-500 to-amber-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg backdrop-blur-sm">
+                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                            </svg>
+                                            Featured
+                                        </span>
+                                    @endif
+                                    <span class="inline-flex items-center bg-blue-600 dark:bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg backdrop-blur-sm">
+                                        {{ ucfirst($property->listing_type) }}
+                                    </span>
+                                </div>
+                                
+                                <!-- Price Badge -->
+                                <div class="absolute bottom-4 right-4">
+                                    <span class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md text-gray-900 dark:text-white px-4 py-2 rounded-lg font-bold text-lg shadow-xl border border-gray-200 dark:border-gray-700">
+                                        {{ $property->formatted_price }}
+                                    </span>
+                                </div>
                             </div>
                             <div class="p-6">
                                 <div class="flex items-center justify-between mb-2">
-                                    <span class="text-sm text-gray-500 dark:text-gray-400">{{ ucfirst($property->type) }}</span>
-                                    <span class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $property->formatted_price }}</span>
+                                    <span class="inline-flex items-center px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-xs font-semibold">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                        </svg>
+                                        {{ ucfirst($property->type) }}
+                                    </span>
+                                    @if($property->status === 'available')
+                                        <span class="inline-flex items-center px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full text-xs font-semibold">
+                                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5 animate-pulse"></span>
+                                            Available
+                                        </span>
+                                    @endif
                                 </div>
-                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">{{ $property->title }}</h3>
-                                <p class="text-gray-600 dark:text-gray-400 mb-4">
-                                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
+                                    {{ $property->title }}
+                                </h3>
+                                <p class="text-gray-600 dark:text-gray-400 mb-4 flex items-center">
+                                    <svg class="w-4 h-4 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     </svg>
-                                    {{ $property->city }}, {{ $property->state }}
+                                    <span class="truncate">{{ $property->city }}, {{ $property->state }}</span>
                                 </p>
                                 <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 border-t dark:border-gray-700 pt-4">
-                                    <span>🛏️ {{ $property->bedrooms }} Beds</span>
-                                    <span>🚿 {{ $property->bathrooms }} Baths</span>
-                                    <span>📏 {{ number_format($property->square_feet) }} sqft</span>
-                                </div>
-                                <div class="mt-4 pt-4 border-t dark:border-gray-700">
-                                    <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
-                                        <div class="flex items-center">
-                                            <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mr-2">
-                                                <span class="text-blue-600 dark:text-blue-300 font-semibold">{{ substr($property->owner->name, 0, 1) }}</span>
-                                            </div>
-                                            <span>{{ $property->owner->name }}</span>
-                                        </div>
+                                    <div class="flex items-center">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                        </svg>
+                                        <span>{{ $property->bedrooms }} Beds</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path>
+                                        </svg>
+                                        <span>{{ $property->bathrooms }} Baths</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5"></path>
+                                        </svg>
+                                        <span>{{ number_format($property->square_feet) }} sqft</span>
                                     </div>
                                 </div>
                             </div>
@@ -555,83 +428,33 @@
         </div>
     </section>
     @endif
-    <section id="contact" class="py-20 bg-linear-to-r from-blue-600 to-purple-600">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl font-bold text-white mb-6">Ready to Find Your Dream Home?</h2>
-            <p class="text-xl text-blue-100 mb-8">Join thousands of happy homeowners who found their perfect property with Home Konnect</p>
+    
+    <!-- Minimal CTA Section with House Background -->
+    <section id="contact" class="relative py-20 overflow-hidden">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');">
+            <!-- Dark overlay for light mode, lighter overlay for dark mode -->
+            <div class="absolute inset-0 bg-gray-900/70 dark:bg-gray-950/80"></div>
+        </div>
+        
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
+                Ready to Find Your Dream Home?
+            </h2>
+            <p class="text-lg sm:text-xl text-gray-200 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+                Join thousands of happy homeowners who found their perfect property with HomeKonnect
+            </p>
+            
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="{{ route('properties.index') }}" class="inline-flex items-center justify-center px-8 py-3 text-base font-semibold text-gray-900 dark:text-gray-900 bg-white dark:bg-white hover:bg-gray-100 dark:hover:bg-gray-200 rounded-lg shadow-lg transition-all duration-200 w-full sm:w-auto">
+                    Browse Properties
+                </a>
+                
+                <a href="{{ route('contact.show') }}" class="inline-flex items-center justify-center px-8 py-3 text-base font-semibold text-white border-2 border-white hover:bg-white hover:text-gray-900 dark:hover:text-gray-900 rounded-lg transition-all duration-200 w-full sm:w-auto">
+                    Contact Us
+                </a>
+            </div>
         </div>
     </section>
-
-    <footer class="bg-gray-900 dark:bg-gray-950 text-gray-300 dark:text-gray-400 py-12 border-t border-gray-800 dark:border-gray-700">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-4 gap-8">
-                <div>
-                    <div class="flex items-center space-x-2 mb-4">
-                        <x-logo size="sm" class="text-white" />
-                        <span class="text-xl font-bold text-white">Home<span class="text-blue-500 dark:text-blue-400">Konnect</span></span>
-                    </div>
-                    <p class="text-sm">Your trusted partner in finding the perfect home.</p>
-                </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4">Quick Links</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-blue-400 dark:hover:text-blue-300 transition">About Us</a></li>
-                        <li><a href="#" class="hover:text-blue-400 dark:hover:text-blue-300 transition">Properties</a></li>
-                        <li><a href="#" class="hover:text-blue-400 dark:hover:text-blue-300 transition">Agents</a></li>
-                        <li><a href="#" class="hover:text-blue-400 dark:hover:text-blue-300 transition">Contact</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4">Support</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-blue-400 dark:hover:text-blue-300 transition">Help Center</a></li>
-                        <li><a href="#" class="hover:text-blue-400 dark:hover:text-blue-300 transition">Privacy Policy</a></li>
-                        <li><a href="#" class="hover:text-blue-400 dark:hover:text-blue-300 transition">Terms of Service</a></li>
-                        <li><a href="#" class="hover:text-blue-400 dark:hover:text-blue-300 transition">FAQ</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4">Contact Us</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li>📧 info@homekonnect.com</li>
-                        <li>📞 +1 (555) 123-4567</li>
-                        <li>📍 123 Real Estate Ave, NY</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-gray-800 dark:border-gray-700 mt-12 pt-8 text-center text-sm">
-                <p>&copy; 2025 Home Konnect. All rights reserved. Built with Laravel & Tailwind CSS.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Theme Toggle Script -->
-    <script>
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
-
-        // Show the correct icon based on the current theme
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            themeToggleLightIcon.classList.remove('hidden');
-        } else {
-            themeToggleDarkIcon.classList.remove('hidden');
-        }
-
-        themeToggleBtn.addEventListener('click', function() {
-            // Toggle icons
-            themeToggleDarkIcon.classList.toggle('hidden');
-            themeToggleLightIcon.classList.toggle('hidden');
-
-            // Toggle theme
-            if (localStorage.theme === 'dark') {
-                document.documentElement.classList.remove('dark');
-                localStorage.theme = 'light';
-            } else {
-                document.documentElement.classList.add('dark');
-                localStorage.theme = 'dark';
-            }
-        });
-    </script>
-</body>
-</html>
+@endsection
