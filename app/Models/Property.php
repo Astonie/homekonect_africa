@@ -38,6 +38,10 @@ class Property extends Model
         'images',
         'videos',
         'virtual_tour_url',
+        'virtual_tour_type',
+        'has_drone_imagery',
+        'has_street_view',
+        'street_view_metadata',
         'ownership_document',
         'tax_receipt',
         'insurance_document',
@@ -56,6 +60,27 @@ class Property extends Model
         'is_featured',
         'is_verified',
         'published_at',
+        // GIS & Visualization Fields
+        'google_place_id',
+        'street_view_available',
+        'street_view_heading',
+        'street_view_pitch',
+        'street_view_zoom',
+        'matterport_url',
+        '360_tour_provider',
+        '360_tour_data',
+        'drone_images',
+        'drone_videos',
+        'aerial_view_url',
+        'map_zoom_level',
+        'map_type',
+        'floor_plans',
+        '3d_model_url',
+        'featured_image_index',
+        'has_video_tour',
+        'has_360_tour',
+        'has_drone_footage',
+        'nearby_poi',
     ];
 
     protected $casts = [
@@ -75,6 +100,18 @@ class Property extends Model
         'maintenance_fee' => 'decimal:2',
         'latitude' => 'decimal:8',
         'longitude' => 'decimal:8',
+        // GIS & Visualization Casts
+        '360_tour_data' => 'array',
+        'drone_images' => 'array',
+        'drone_videos' => 'array',
+        'floor_plans' => 'array',
+        'nearby_poi' => 'array',
+        'street_view_available' => 'boolean',
+        'street_view_heading' => 'decimal:2',
+        'street_view_pitch' => 'decimal:2',
+        'has_video_tour' => 'boolean',
+        'has_360_tour' => 'boolean',
+        'has_drone_footage' => 'boolean',
     ];
 
     /**
@@ -113,6 +150,52 @@ class Property extends Model
     public function verifier(): BelongsTo
     {
         return $this->belongsTo(User::class, 'verified_by');
+    }
+
+    /**
+     * Get all media for this property
+     */
+    public function media()
+    {
+        return $this->hasMany(PropertyMedia::class)->orderBy('display_order');
+    }
+
+    /**
+     * Get cover image media
+     */
+    public function coverImage()
+    {
+        return $this->hasOne(PropertyMedia::class)->where('is_cover', true);
+    }
+
+    /**
+     * Get all images
+     */
+    public function allImages()
+    {
+        return $this->hasMany(PropertyMedia::class)
+            ->whereIn('type', ['image', 'drone_image'])
+            ->orderBy('display_order');
+    }
+
+    /**
+     * Get all videos
+     */
+    public function allVideos()
+    {
+        return $this->hasMany(PropertyMedia::class)
+            ->whereIn('type', ['video', 'drone_video'])
+            ->orderBy('display_order');
+    }
+
+    /**
+     * Get floor plans
+     */
+    public function floorPlanMedia()
+    {
+        return $this->hasMany(PropertyMedia::class)
+            ->where('type', 'floor_plan')
+            ->orderBy('display_order');
     }
 
        /**

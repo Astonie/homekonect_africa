@@ -11,9 +11,9 @@
             <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2850&q=80" 
                  alt="Modern African Luxury Home" 
                  class="w-full h-full object-cover">
-            <!-- Dark Gradient Overlays for text readability -->
-            <div class="absolute inset-0 bg-gradient-to-br from-gray-900/95 via-blue-900/90 to-gray-900/95 dark:from-black/98 dark:via-blue-950/95 dark:to-black/98"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent dark:from-black/90"></div>
+            <!-- Transparent Dark Overlays for text readability -->
+            <div class="absolute inset-0 bg-gradient-to-br from-black/40 via-black/30 to-black/40 dark:from-black/60 dark:via-black/50 dark:to-black/60"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent dark:from-black/70"></div>
         </div>
 
         <!-- Animated Background Pattern Overlay -->
@@ -24,13 +24,6 @@
         <!-- Hero Content -->
         <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
             <div class="text-center space-y-12">
-                <!-- Badge -->
-                <div data-aos="fade-down" class="inline-flex items-center gap-2 bg-blue-500/10 backdrop-blur-md text-blue-300 px-5 py-2.5 rounded-full border border-blue-400/30 shadow-lg hover:shadow-blue-500/30 transition-all duration-300 hover:scale-105">
-                    <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="text-sm font-medium">Africa's Most Trusted Real Estate Platform</span>
-                </div>
                 
                 <!-- Main Heading -->
                 <div data-aos="fade-up" data-aos-delay="100" class="space-y-6">
@@ -38,21 +31,21 @@
                         Find Your Dream Home
                         <br>
                         <span class="relative inline-block mt-2">
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 animate-gradient">
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-brand-500 to-brand-600 animate-gradient">
                                 Across Africa
                             </span>
-                            <span class="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></span>
+                            <span class="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-brand-400 via-brand-500 to-brand-600 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></span>
                         </span>
                     </h1>
                     
-                    <p class="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto font-light">
+                    <p class="text-lg sm:text-xl text-gray-200 leading-relaxed max-w-3xl mx-auto font-light">
                         Connect with verified properties, trusted agents, and secure transactions across {{ $stats['cities'] }}+ African cities
                     </p>
                 </div>
                 
                 <!-- CTA Buttons -->
                 <div data-aos="fade-up" data-aos-delay="200" class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                    <a href="#properties" class="group inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold shadow-2xl shadow-blue-600/30 hover:shadow-blue-600/50 transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 space-x-3 w-full sm:w-auto">
+                    <a href="#properties" class="group inline-flex items-center justify-center bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-xl font-semibold shadow-2xl shadow-brand-600/30 hover:shadow-brand-700/50 transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 space-x-3 w-full sm:w-auto">
                         <svg class="w-5 h-5 transition-transform duration-300 group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
@@ -68,19 +61,19 @@
                 
                 <!-- Stats Cards -->
                 <div data-aos="fade-up" data-aos-delay="300" class="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6 pt-12 max-w-4xl mx-auto">
-                    <div class="group bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-blue-500/50 shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="group bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-white/30 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                         <div class="text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">{{ number_format($stats['users']) }}+</div>
                         <div class="text-sm text-gray-400 font-medium">Verified Users</div>
                     </div>
-                    <div class="group bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-cyan-500/50 shadow-xl hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="group bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-white/30 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                         <div class="text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">{{ number_format($stats['properties']) }}+</div>
                         <div class="text-sm text-gray-400 font-medium">Properties Listed</div>
                     </div>
-                    <div class="group bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-purple-500/50 shadow-xl hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="group bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-white/30 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                         <div class="text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">{{ $stats['cities'] }}+</div>
                         <div class="text-sm text-gray-400 font-medium">African Cities</div>
                     </div>
-                    <div class="group bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-green-500/50 shadow-xl hover:shadow-2xl hover:shadow-green-500/20 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="group bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-white/30 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                         <div class="text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">{{ $stats['satisfaction'] }}%</div>
                         <div class="text-sm text-gray-400 font-medium">Satisfaction Rate</div>
                     </div>
@@ -89,13 +82,13 @@
                 <!-- Trust Indicators -->
                 <div data-aos="fade-up" data-aos-delay="400" class="flex flex-wrap items-center justify-center gap-6 pt-8 text-gray-400 text-sm">
                     <div class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                         </svg>
                         <span>Verified Listings</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
                         </svg>
                         <span>24/7 Support</span>
@@ -118,7 +111,7 @@
     <section id="properties" class="py-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Search Card -->
-            <div class="bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700 dark:from-blue-800 dark:via-blue-900 dark:to-purple-900 rounded-3xl shadow-2xl overflow-hidden">
+            <div class="bg-gradient-to-br from-info-600 via-info-700 to-purple-700 dark:from-info-800 dark:via-info-900 dark:to-purple-900 rounded-3xl shadow-2xl overflow-hidden">
                 <!-- Decorative Pattern Overlay -->
                 <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.3\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
                 
@@ -132,7 +125,7 @@
                             <span class="text-white text-sm font-medium">Advanced Property Search</span>
                         </div>
                         <h2 class="text-3xl md:text-4xl font-bold text-white mb-3">Find Your Perfect Property</h2>
-                        <p class="text-blue-100 dark:text-blue-200 text-lg max-w-2xl mx-auto">
+                        <p class="text-info-100 dark:text-info-200 text-lg max-w-2xl mx-auto">
                             Search through thousands of verified properties with our advanced filtering system
                         </p>
                     </div>
@@ -140,18 +133,18 @@
                     <!-- Main Search CTA -->
                     <div class="max-w-4xl mx-auto">
                         <a href="{{ route('properties.index') }}" class="block group relative">
-                            <div class="absolute -inset-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-500"></div>
+                            <div class="absolute -inset-1 bg-gradient-to-r from-info-400 to-purple-400 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-500"></div>
                             <div class="relative bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02]">
                                 <div class="flex flex-col lg:flex-row items-center gap-6">
                                     <!-- Search Info -->
                                     <div class="flex-1 text-left w-full">
                                         <!-- Feature Badges -->
                                         <div class="flex flex-wrap gap-3 mb-5">
-                                            <div class="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 px-4 py-2.5 rounded-lg border border-blue-100 dark:border-blue-800">
-                                                <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <div class="flex items-center gap-2 bg-info-50 dark:bg-info-900/30 px-4 py-2.5 rounded-lg border border-info-100 dark:border-info-800">
+                                                <svg class="w-5 h-5 text-info-600 dark:text-info-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                                                 </svg>
-                                                <span class="text-sm font-semibold text-blue-600 dark:text-blue-400">Smart Filters</span>
+                                                <span class="text-sm font-semibold text-info-600 dark:text-info-400">Smart Filters</span>
                                             </div>
                                             <div class="flex items-center gap-2 bg-purple-50 dark:bg-purple-900/30 px-4 py-2.5 rounded-lg border border-purple-100 dark:border-purple-800">
                                                 <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -167,7 +160,7 @@
                                             </div>
                                         </div>
                                         
-                                        <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                        <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-info-600 dark:group-hover:text-info-400 transition-colors">
                                             Explore Advanced Search Options
                                         </h3>
                                         <p class="text-gray-600 dark:text-gray-400 mb-4">
@@ -197,7 +190,7 @@
                                     
                                     <!-- Search Icon -->
                                     <div class="flex-shrink-0">
-                                        <div class="bg-gradient-to-br from-blue-600 to-purple-600 text-white rounded-2xl p-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-xl">
+                                        <div class="bg-gradient-to-br from-brand-600 to-brand-700 text-white rounded-2xl p-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-xl">
                                             <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                             </svg>
@@ -278,7 +271,7 @@
                                             Featured
                                         </span>
                                     @endif
-                                    <span class="inline-flex items-center bg-blue-600 dark:bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg backdrop-blur-sm">
+                                    <span class="inline-flex items-center bg-info-600 dark:bg-info-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg backdrop-blur-sm">
                                         {{ ucfirst($property->listing_type) }}
                                     </span>
                                 </div>
@@ -305,7 +298,7 @@
                                         </span>
                                     @endif
                                 </div>
-                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-1 group-hover:text-brand-600 dark:group-hover:text-brand-500 transition">
                                     {{ $property->title }}
                                 </h3>
                                 <p class="text-gray-600 dark:text-gray-400 mb-4 flex items-center">
@@ -341,7 +334,7 @@
                 </div>
                 
                 <div class="text-center mt-12">
-                    <a href="{{ route('properties.index') }}" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition font-semibold shadow-lg">
+                    <a href="{{ route('properties.index') }}" class="inline-block bg-brand-600 text-white px-8 py-3 rounded-lg hover:bg-brand-700 transition font-semibold shadow-lg">
                         View All Properties
                     </a>
                 </div>
@@ -364,8 +357,8 @@
             </div>
             <div class="grid md:grid-cols-3 gap-12">
                 <div class="text-center">
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full mb-6">
-                        <svg class="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-info-100 dark:bg-info-900 rounded-full mb-6">
+                        <svg class="w-8 h-8 text-info-600 dark:text-info-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </div>
@@ -406,14 +399,14 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 @foreach($teamMembers as $member)
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 border border-gray-100 dark:border-gray-700">
-                        <div class="relative h-64 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900">
+                        <div class="relative h-64 bg-gradient-to-br from-info-100 to-purple-100 dark:from-info-900 dark:to-purple-900">
                             <img src="{{ $member->photo_url }}" alt="{{ $member->name }}" 
                                  class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                         </div>
                         <div class="p-6">
                             <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">{{ $member->name }}</h3>
-                            <p class="text-blue-600 dark:text-blue-400 font-semibold text-sm mb-3">{{ $member->role }}</p>
+                            <p class="text-info-600 dark:text-info-400 font-semibold text-sm mb-3">{{ $member->role }}</p>
                             <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{{ $member->bio }}</p>
                         </div>
                     </div>

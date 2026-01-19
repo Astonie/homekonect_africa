@@ -13,6 +13,7 @@ use App\Http\Controllers\Agent\AgentDashboardController;
 use App\Http\Controllers\Agent\PropertyController as AgentPropertyController;
 use App\Http\Controllers\KycVerificationController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\PropertyMediaController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ContactController;
 use App\Models\Property;
@@ -146,6 +147,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/create', [KycVerificationController::class, 'create'])->name('create');
         Route::post('/submit', [KycVerificationController::class, 'store'])->name('submit');
         Route::get('/status', [KycVerificationController::class, 'status'])->name('status');
+    });
+
+    // Property Media Routes (GIS Features)
+    Route::prefix('properties/{property}/media')->name('properties.media.')->group(function () {
+        Route::post('/upload', [PropertyMediaController::class, 'upload'])->name('upload');
+        Route::delete('/{media}', [PropertyMediaController::class, 'destroy'])->name('destroy');
+        Route::patch('/{media}/order', [PropertyMediaController::class, 'updateOrder'])->name('order');
+        Route::patch('/{media}/featured', [PropertyMediaController::class, 'setFeatured'])->name('featured');
     });
 });
 

@@ -19,7 +19,7 @@
             <!-- Background Image with Overlay -->
             <div class="absolute inset-0 z-0">
                 <!-- Using Unsplash property image as background -->
-                <div class="absolute inset-0 bg-gradient-to-br from-indigo-900/90 via-blue-900/85 to-purple-900/90 z-10"></div>
+                <div class="absolute inset-0 bg-gradient-to-br from-black/40 via-black/30 to-black/40 z-10"></div>
                 <img 
                     src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80" 
                     alt="Modern Property Background" 
@@ -33,7 +33,7 @@
                 <div class="flex justify-center mb-6">
                     <a href="/" class="block">
                         <div class="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border border-white/20 transform transition hover:scale-105">
-                            <x-application-logo class="w-20 h-20 fill-current text-indigo-600" />
+                            <x-application-logo class="w-20 h-20 fill-current text-brand-600" />
                         </div>
                     </a>
                 </div>
@@ -41,7 +41,7 @@
                 <!-- Brand Name -->
                 <div class="text-center mb-6">
                     <h1 class="text-3xl font-bold text-white drop-shadow-lg">HomeKonnectAfrica</h1>
-                    <p class="text-indigo-200 text-sm mt-1">Connecting You to Your Dream Property</p>
+                    <p class="text-gray-200 text-sm mt-1">Connecting You to Your Dream Property</p>
                 </div>
 
                 <!-- Card Container -->
@@ -61,9 +61,9 @@
 
             <!-- Decorative Elements -->
             <div class="absolute top-0 left-0 w-full h-full pointer-events-none z-10">
-                <div class="absolute top-10 left-10 w-32 h-32 bg-blue-400/10 rounded-full blur-3xl"></div>
-                <div class="absolute bottom-10 right-10 w-40 h-40 bg-purple-400/10 rounded-full blur-3xl"></div>
-                <div class="absolute top-1/2 right-20 w-24 h-24 bg-indigo-400/10 rounded-full blur-2xl"></div>
+                <div class="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-3xl"></div>
+                <div class="absolute bottom-10 right-10 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
+                <div class="absolute top-1/2 right-20 w-24 h-24 bg-white/5 rounded-full blur-2xl"></div>
             </div>
         </div>
     </body>
