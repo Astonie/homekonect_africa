@@ -118,6 +118,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
+                    <!-- Logo in header -->
+                    <x-logo size="sm" class="flex-shrink-0" />
                     <div>
                         @if(isset($breadcrumbs))
                             {{ $breadcrumbs }}

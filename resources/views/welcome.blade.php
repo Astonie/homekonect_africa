@@ -7,18 +7,20 @@
     <!-- Hero Section -->
     <section class="relative min-h-screen flex items-center overflow-hidden">
         <!-- Background Image -->
+        <!-- Background Image -->
         <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2850&q=80" 
-                 alt="Modern African Luxury Home" 
-                 class="w-full h-full object-cover">
+            @if(\App\Models\Setting::get('hero_image'))
+                <img src="{{ asset('storage/' . \App\Models\Setting::get('hero_image')) }}" 
+                     alt="Hero Background" 
+                     class="w-full h-full object-cover">
+            @else
+                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2850&q=80" 
+                     alt="Modern African Luxury Home" 
+                     class="w-full h-full object-cover">
+            @endif
             <!-- Transparent Dark Overlays for text readability -->
             <div class="absolute inset-0 bg-gradient-to-br from-black/40 via-black/30 to-black/40 dark:from-black/60 dark:via-black/50 dark:to-black/60"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent dark:from-black/70"></div>
-        </div>
-
-        <!-- Animated Background Pattern Overlay -->
-        <div class="absolute inset-0 z-0 opacity-5">
-            <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
         </div>
         
         <!-- Hero Content -->
@@ -28,18 +30,11 @@
                 <!-- Main Heading -->
                 <div data-aos="fade-up" data-aos-delay="100" class="space-y-6">
                     <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight tracking-tight">
-                        Find Your Dream Home
-                        <br>
-                        <span class="relative inline-block mt-2">
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-brand-500 to-brand-600 animate-gradient">
-                                Across Africa
-                            </span>
-                            <span class="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-brand-400 via-brand-500 to-brand-600 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></span>
-                        </span>
+                        {{ \App\Models\Setting::get('hero_title', 'Find Your Dream Home Across Africa') }}
                     </h1>
                     
                     <p class="text-lg sm:text-xl text-gray-200 leading-relaxed max-w-3xl mx-auto font-light">
-                        Connect with verified properties, trusted agents, and secure transactions across {{ $stats['cities'] }}+ African cities
+                        {{ \App\Models\Setting::get('hero_subtitle', 'Connect with verified properties, trusted agents, and secure transactions across 8+ African cities') }}
                     </p>
                 </div>
                 
@@ -112,8 +107,6 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Search Card -->
             <div class="bg-gradient-to-br from-info-600 via-info-700 to-purple-700 dark:from-info-800 dark:via-info-900 dark:to-purple-900 rounded-3xl shadow-2xl overflow-hidden">
-                <!-- Decorative Pattern Overlay -->
-                <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.3\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
                 
                 <div class="relative p-8 md:p-12">
                     <!-- Header -->

@@ -33,7 +33,11 @@
                 <div class="flex justify-center mb-6">
                     <a href="/" class="block">
                         <div class="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border border-white/20 transform transition hover:scale-105">
-                            <x-application-logo class="w-20 h-20 fill-current text-brand-600" />
+                            @if(\App\Models\Setting::get('company_logo'))
+                                <img src="{{ asset('storage/' . \App\Models\Setting::get('company_logo')) }}" alt="Logo" class="w-20 h-20 object-contain">
+                            @else
+                                <x-application-logo class="w-20 h-20 fill-current text-brand-600" />
+                            @endif
                         </div>
                     </a>
                 </div>

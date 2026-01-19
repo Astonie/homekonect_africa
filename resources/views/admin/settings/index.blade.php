@@ -63,7 +63,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('admin.site-settings.update') }}" class="space-y-6">
+            <form method="POST" action="{{ route('admin.site-settings.update') }}" class="space-y-6" enctype="multipart/form-data">
                 @csrf
                 @method('PATCH')
 
@@ -91,6 +91,24 @@
                                             rows="3"
                                             class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
                                         >{{ old('settings.' . $setting->key, $setting->value) }}</textarea>
+                                    @elseif ($setting->type === 'image')
+                                        @if($setting->value)
+                                            <div class="mt-2 mb-2">
+                                                <img src="{{ asset('storage/' . $setting->value) }}" alt="Current Image" class="h-20 w-auto object-contain border rounded p-1">
+                                            </div>
+                                        @endif
+                                        <input
+                                            type="file"
+                                            id="{{ $setting->key }}"
+                                            name="settings[{{ $setting->key }}]"
+                                            accept="image/*"
+                                            class="mt-2 block w-full text-sm text-gray-500
+                                                file:mr-4 file:py-2 file:px-4
+                                                file:rounded-full file:border-0
+                                                file:text-sm file:font-semibold
+                                                file:bg-purple-50 file:text-purple-700
+                                                hover:file:bg-purple-100"
+                                        />
                                     @else
                                         <input
                                             type="{{ $setting->type === 'email' ? 'email' : ($setting->type === 'phone' ? 'tel' : 'text') }}"
